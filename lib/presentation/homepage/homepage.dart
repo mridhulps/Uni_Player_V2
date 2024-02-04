@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:uni_player_2/Refactory/funtions.dart';
-import 'package:uni_player_2/Refactory/widgets.dart';
 
 import 'package:uni_player_2/presentation/homepage/widgets/appbar.dart';
+import 'package:uni_player_2/presentation/homepage/widgets/artwork_image.dart';
 import 'package:uni_player_2/presentation/homepage/widgets/controll_system.dart';
 import 'package:uni_player_2/presentation/homepage/widgets/duration_bar.dart';
 
@@ -24,58 +24,29 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
+              //FIRST CONTAINER FLEX;
               Expanded(
-                  flex: 5,
+                  flex: 6,
                   child: Container(
                       // color: Colors.lightBlue,
-                      padding:
-                          const EdgeInsets.only(left: 10, right: 10, top: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly  ,
                         children: [
                           // ARTWORK CONTAINER ;
-                          MorphismContainer(
-                            disablebutton: true,
-                            width: screnRatio(context: context).width,
-                            height: screnRatio(context: context).width,
-                            radius: 20,
-                            blurradius: 5,
-                            offset1: const Offset(-4, -4),
-                            offset2: const Offset(4, 4),
-                            ontap: () => null,
-                            child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(),
-                                  const Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(),
-                                      Icon(
-                                        Icons.favorite,
-                                        color: Colors.red,
-                                      )
-                                    ],
-                                  )
-                                ]),
-                          ),
+                          ArtWorkWidget(),
+                          //SPACER;
                           SizedBox(
                             height: 20,
                           ),
-                          const DurationBar()
+                          //DURATION CONTAINER;
+                          DurationBar()
                         ],
                       ))),
 
-              // SONG INFO CONTAINER;
+              // SECOND CONTAINER FLEX;
 
-              const Expanded(
-                  child: SizedBox(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [ControllSystem()]),
-              )),
+              const Expanded(child: SizedBox(child: ControllSystem())),
             ],
           ),
         ),

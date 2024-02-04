@@ -5,6 +5,7 @@ class AppTheme {
   static theme() {
     return ThemeData(
         useMaterial3: true,
-        scaffoldBackgroundColor: ConstColor.backgroundcolor);
+        scaffoldBackgroundColor: ConstColor.backgroundcolor,
+        iconTheme: const IconThemeData(color: ConstColor.buttoncolor));
   }
 }

@@ -13,24 +13,12 @@ class ControllSystem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 100,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: ConstColor.backgroundcolor,
-          boxShadow: [
-            BoxShadow(
-                color: color,
-                offset: offset,
-                blurRadius: 5,
-                blurStyle: blurstyle),
-            BoxShadow(
-                offset: -offset,
-                color: color,
-                blurRadius: 5,
-                blurStyle: blurstyle),
-          ]),
+    return MorphismContainer(
+      ontap: () {},
+      radius: 20,
+      blurradius: 1,
+      offset1: const Offset(-2, -2),
+      offset2: const Offset(5, 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

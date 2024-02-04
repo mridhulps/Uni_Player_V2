@@ -36,7 +36,7 @@ class MorphismContainer extends StatefulWidget {
 
 class _MorphismContainerState extends State<MorphismContainer> {
   final color = const Color.fromRGBO(112, 112, 112, 1);
-
+  final color2 = Colors.black54;
   final blurstyle = BlurStyle.solid;
 
   final trueoffset = const Offset(2, 2);
@@ -78,7 +78,7 @@ class _MorphismContainerState extends State<MorphismContainer> {
                 boxShadow: [
                   widget.disablebutton == false
                       ? BoxShadow(
-                          color: color,
+                          color: color2,
                           offset: ispressed == false
                               ? widget.offset2 ?? const Offset(3, 3)
                               : -trueoffset,
@@ -114,17 +114,38 @@ class _MorphismContainerState extends State<MorphismContainer> {
 //TEXT REFACTOR WIDGET;
 Widget textwidget(
     {required String string,
+    double paddingright = 0,
+    double paddingleft = 0,
     Color? color,
     double? fontsize,
     FontWeight? fontweight,
     TextOverflow? overflow}) {
-  return Text(
-    string,
-    style: TextStyle(
+  return Padding(
+    padding: EdgeInsets.only(left: paddingleft, right: paddingright),
+    child: Text(
+      string,
+      style: TextStyle(
+        color: color,
+        fontSize: fontsize,
+        fontWeight: fontweight,
+        overflow: overflow,
+      ),
+    ),
+  );
+}
+
+Widget iconWidget(
+    {required IconData icon,
+    double? size,
+    Color? color,
+    double? paddingleft,
+    double? paddingright}) {
+  return Padding(
+    padding: EdgeInsets.only(left: paddingleft ?? 0, right: paddingright ?? 0),
+    child: Icon(
+      icon,
+      size: size,
       color: color,
-      fontSize: fontsize,
-      fontWeight: fontweight,
-      overflow: overflow,
     ),
   );
 }
