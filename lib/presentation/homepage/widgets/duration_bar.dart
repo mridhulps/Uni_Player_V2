@@ -7,24 +7,28 @@ class DurationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MorphismContainer(
-      ontap: () => null,
-      disablebutton: false,
-      offset1: const Offset(-2, -2),
-      offset2: const Offset(5, 5),
-      blurradius: 1,
+    return CustomContainer(
       radius: 15,
       child: Column(
         children: [
           //DURATION TIME;
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              textwidget(
-                  string: '0.00', paddingleft: 20, fontweight: FontWeight.bold),
-              textwidget(
-                  string: '2.24', paddingright: 20, fontweight: FontWeight.bold)
-            ],
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 10,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                textwidget(
+                    string: '0.00',
+                    paddingleft: 20,
+                    fontweight: FontWeight.bold),
+                textwidget(
+                    string: '2.24',
+                    paddingright: 20,
+                    fontweight: FontWeight.bold)
+              ],
+            ),
           ),
           //DURATION BAR;
           Slider(
@@ -38,51 +42,46 @@ class DurationBar extends StatelessWidget {
               onChanged: (value) {}),
 
           Padding(
-            padding: const EdgeInsets.only(bottom: 10, top: 25),
+            padding: const EdgeInsets.only(bottom: 10, top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                MorphismContainer(
+                CustomContainer(
                   radius: 4,
                   width: 40,
                   height: 40,
-                  disablebutton: false,
-                  ontap: () {},
                   child: iconWidget(
                     icon: Icons.shuffle_rounded,
+                    color: ConstColor.buttoncolor,
                     size: 25,
                   ),
                 ),
-                MorphismContainer(
+                CustomContainer(
                   radius: 4,
                   width: 40,
                   height: 40,
-                  disablebutton: false,
-                  ontap: () {},
                   child: iconWidget(
                     icon: Icons.library_add_outlined,
+                    color: ConstColor.buttoncolor,
                     size: 25,
                   ),
                 ),
-                MorphismContainer(
+                CustomContainer(
                   radius: 4,
                   width: 40,
                   height: 40,
-                  disablebutton: false,
-                  ontap: () {},
                   child: iconWidget(
                     icon: Icons.volume_down_rounded,
+                    color: ConstColor.buttoncolor,
                     size: 25,
                   ),
                 ),
-                MorphismContainer(
+                CustomContainer(
                   radius: 4,
                   width: 40,
-                  height: 40,
-                  disablebutton: false,
-                  ontap: () {},
                   child: iconWidget(
                     icon: Icons.menu_rounded,
+                    color: ConstColor.buttoncolor,
                     size: 25,
                   ),
                 ),

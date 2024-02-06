@@ -14,7 +14,7 @@ class NewApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme(),
-      home: const HomePage(),
+      home: HomePage(),
     );
   }
 }

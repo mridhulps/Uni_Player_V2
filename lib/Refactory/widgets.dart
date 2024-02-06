@@ -1,111 +1,41 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:uni_player_2/app_Global_const/const.dart';
 
-class MorphismContainer extends StatefulWidget {
-  final bool? returnswitch;
+class CustomContainer extends StatelessWidget {
   final double? width;
   final double? height;
   final double? radius;
-  final Offset? offset1;
-  final Offset? offset2;
-  final double? blurradius;
+  final Color? color;
+  final bool borderEnable;
 
+  final Color bordercolor;
+  final double borderwidth;
   final Widget? child;
-  final Function ontap;
-  final bool disablebutton;
 
-  const MorphismContainer({
+  const CustomContainer({
     super.key,
-    this.returnswitch = false,
     this.width,
     this.height,
     this.radius,
-    this.offset1,
-    this.offset2,
-    this.blurradius,
+    this.borderEnable = false,
+    this.bordercolor = Colors.white,
+    this.borderwidth = 0,
+    this.color,
     this.child,
-    required this.ontap,
-    this.disablebutton = false,
   });
 
   @override
-  State<MorphismContainer> createState() => _MorphismContainerState();
-}
-
-class _MorphismContainerState extends State<MorphismContainer> {
-  final color = const Color.fromRGBO(112, 112, 112, 1);
-  final color2 = Colors.black54;
-  final blurstyle = BlurStyle.solid;
-
-  final trueoffset = const Offset(2, 2);
-
-  bool ispressed = false;
-
-  @override
   Widget build(BuildContext context) {
-    return AbsorbPointer(
-      absorbing: widget.disablebutton,
-      child: GestureDetector(
-        onTap: () {
-          if (widget.returnswitch == false) {
-            setState(() {
-              ispressed = !ispressed;
-            });
-            widget.ontap();
-          } else {
-            setState(() {
-              ispressed = !ispressed;
-              widget.ontap();
-            });
-
-            Timer(const Duration(milliseconds: 100), () {
-              setState(() {
-                ispressed = !ispressed;
-              });
-            });
-          }
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 100),
-          child: Container(
-            width: widget.width,
-            height: widget.height,
-            decoration: BoxDecoration(
-                color: ConstColor.backgroundcolor,
-                borderRadius: BorderRadius.circular(widget.radius ?? 0),
-                boxShadow: [
-                  widget.disablebutton == false
-                      ? BoxShadow(
-                          color: color2,
-                          offset: ispressed == false
-                              ? widget.offset2 ?? const Offset(3, 3)
-                              : -trueoffset,
-                          blurRadius: widget.blurradius ?? 0.0,
-                          blurStyle: blurstyle)
-                      : BoxShadow(
-                          color: color,
-                          offset: widget.offset1 ?? const Offset(3, 3),
-                          blurRadius: widget.blurradius ?? 0,
-                          blurStyle: blurstyle),
-                  widget.disablebutton == false
-                      ? BoxShadow(
-                          offset: ispressed == false
-                              ? widget.offset1 ?? const Offset(3, 3)
-                              : trueoffset,
-                          color: ispressed == false ? Colors.white24 : color,
-                          blurRadius: widget.blurradius ?? 0.0,
-                          blurStyle: blurstyle)
-                      : BoxShadow(
-                          color: color,
-                          offset: widget.offset2 ?? const Offset(3, 3),
-                          blurRadius: 5,
-                          blurStyle: blurstyle),
-                ]),
-            child: Center(child: widget.child),
-          ),
-        ),
+    return GestureDetector(
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+            color: color ?? Colors.white,
+            borderRadius: BorderRadius.circular(radius ?? 10),
+            border: borderEnable == true
+                ? Border.all(color: bordercolor, width: borderwidth)
+                : null),
+        child: Center(child: child),
       ),
     );
   }
@@ -134,18 +64,23 @@ Widget textwidget(
   );
 }
 
-Widget iconWidget(
-    {required IconData icon,
-    double? size,
-    Color? color,
-    double? paddingleft,
-    double? paddingright}) {
+Widget iconWidget({
+  required IconData icon,
+  double? size,
+  Color color = Colors.white,
+  double? paddingleft,
+  double? paddingright,
+  Function()? ontap,
+}) {
   return Padding(
     padding: EdgeInsets.only(left: paddingleft ?? 0, right: paddingright ?? 0),
-    child: Icon(
-      icon,
-      size: size,
-      color: color,
+    child: InkWell(
+      onTap: ontap,
+      child: Icon(
+        icon,
+        size: size,
+        color: color,
+      ),
     ),
   );
 }

@@ -8,48 +8,55 @@ class ArtWorkWidget extends StatelessWidget {
   const ArtWorkWidget({super.key});
 
   final String imageurl = 'https://wallpapercave.com/wp/wp5121792.jpg';
+  final String error = '';
 
   @override
   Widget build(BuildContext context) {
     //ROOT CONTAINER;
-    return Column(
-      children: [
-        //ARTWORK CONTAINER;
+    return SizedBox(
+      child: Column(
+        children: [
+          //ARTWORK CONTAINER;
 
-        MorphismContainer(
-          disablebutton: false,
-          width: screnRatio(context: context).width,
-          height: screnRatio(context: context).width / 1.3,
-          radius: 20,
-          blurradius: 0,
-          offset1: const Offset(-4, -4),
-          offset2: const Offset(5, 5),
-          ontap: () => null,
-          child: Container(
-            margin: const EdgeInsets.all(2),
-            decoration: BoxDecoration(
-                //  color: Colors.amber,
-                borderRadius: BorderRadius.circular(20),
-                image: DecorationImage(
-                    fit: BoxFit.fill, image: NetworkImage(imageurl))),
+          CustomContainer(
             width: screnRatio(context: context).width,
-            height: 300,
-          ),
-        ),
-
-        ConstSize.height25,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            iconWidget(
-              icon: Icons.photo_library_rounded,
+            height: screnRatio(context: context).width / 1.3,
+            // radius: 20,
+            borderEnable: true,
+            borderwidth: 2,
+            child: Container(
+              margin: const EdgeInsets.all(0),
+              width: screnRatio(context: context).width,
+              height: 300,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image(
+                  image: NetworkImage(imageurl),
+                  fit: BoxFit.fill,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      child: iconWidget(
+                          icon: Icons.music_note_rounded,
+                          color: ConstColor.backgroundcolorblack,
+                          size: screnRatio(context: context).width / 3.1),
+                    );
+                  },
+                ),
+              ),
             ),
-            iconWidget(
-              icon: Icons.favorite_outline,
-            )
-          ],
-        )
-      ],
+          ),
+
+          ConstSize.height25,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              iconWidget(
+                  icon: Icons.photo_library_rounded, color: Colors.white),
+              iconWidget(icon: Icons.favorite_outline, color: Colors.white)
+            ],
+          )
+        ],
+      ),
     );
   }
 }
