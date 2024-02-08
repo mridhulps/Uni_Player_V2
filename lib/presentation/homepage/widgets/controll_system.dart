@@ -15,20 +15,30 @@ class ControllSystem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          iconWidget(
-            icon: Icons.skip_previous_rounded,
-            color: ConstColor.buttoncolor,
-            size: 40,
+          materialButton(
+            child: iconWidget(
+              icon: Icons.skip_previous_rounded,
+              color: ConstColor.buttoncolor,
+              size: 40,
+            ),
           ),
-          iconWidget(
-            icon: Icons.play_arrow_rounded,
-            color: ConstColor.buttoncolor,
-            size: 70,
+          Material(
+            elevation: 3,
+            borderOnForeground: false,
+            type: MaterialType.circle,
+            color: Colors.white,
+            child: iconWidget(
+              icon: Icons.play_arrow_rounded,
+              color: ConstColor.buttoncolor,
+              size: 60,
+            ),
           ),
-          iconWidget(
-            icon: Icons.skip_next_rounded,
-            color: ConstColor.buttoncolor,
-            size: 40,
+          materialButton(
+            child: iconWidget(
+              icon: Icons.skip_next_rounded,
+              color: ConstColor.buttoncolor,
+              size: 40,
+            ),
           ),
         ],
       ),

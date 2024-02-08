@@ -46,43 +46,48 @@ class DurationBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                CustomContainer(
-                  radius: 4,
-                  width: 40,
-                  height: 40,
-                  child: iconWidget(
-                    icon: Icons.shuffle_rounded,
-                    color: ConstColor.buttoncolor,
-                    size: 25,
+                materialButton(
+                  child: CustomContainer(
+                    radius: 10,
+                    width: 40,
+                    child: iconWidget(
+                      icon: Icons.shuffle_rounded,
+                      color: ConstColor.buttoncolor,
+                      size: 25,
+                    ),
                   ),
                 ),
-                CustomContainer(
-                  radius: 4,
-                  width: 40,
-                  height: 40,
-                  child: iconWidget(
-                    icon: Icons.library_add_outlined,
-                    color: ConstColor.buttoncolor,
-                    size: 25,
+                materialButton(
+                  child: CustomContainer(
+                    radius: 10,
+                    width: 40,
+                    child: iconWidget(
+                      icon: Icons.library_add_outlined,
+                      color: ConstColor.buttoncolor,
+                      size: 25,
+                    ),
                   ),
                 ),
-                CustomContainer(
-                  radius: 4,
-                  width: 40,
-                  height: 40,
-                  child: iconWidget(
-                    icon: Icons.volume_down_rounded,
-                    color: ConstColor.buttoncolor,
-                    size: 25,
+                materialButton(
+                  child: CustomContainer(
+                    radius: 4,
+                    width: 40,
+                    child: iconWidget(
+                      icon: Icons.volume_down_rounded,
+                      color: ConstColor.buttoncolor,
+                      size: 25,
+                    ),
                   ),
                 ),
-                CustomContainer(
-                  radius: 4,
-                  width: 40,
-                  child: iconWidget(
-                    icon: Icons.menu_rounded,
-                    color: ConstColor.buttoncolor,
-                    size: 25,
+                materialButton(
+                  child: CustomContainer(
+                    radius: 4,
+                    width: 40,
+                    child: iconWidget(
+                      icon: Icons.menu_rounded,
+                      color: ConstColor.buttoncolor,
+                      size: 25,
+                    ),
                   ),
                 ),
               ],

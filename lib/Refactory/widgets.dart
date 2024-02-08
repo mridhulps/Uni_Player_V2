@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomContainer extends StatelessWidget {
   final double? width;
@@ -42,27 +43,33 @@ class CustomContainer extends StatelessWidget {
 }
 
 //TEXT REFACTOR WIDGET;
-Widget textwidget(
-    {required String string,
-    double paddingright = 0,
-    double paddingleft = 0,
-    Color? color,
-    double? fontsize,
-    FontWeight? fontweight,
-    TextOverflow? overflow}) {
+Widget textwidget({
+  required String string,
+  double paddingright = 0,
+  double paddingleft = 0,
+  Color? color,
+  double? fontsize,
+  FontWeight? fontweight,
+  TextOverflow? overflow,
+  FontType? fonttype = FontType.roboto,
+}) {
   return Padding(
     padding: EdgeInsets.only(left: paddingleft, right: paddingright),
     child: Text(
       string,
       style: TextStyle(
-        color: color,
-        fontSize: fontsize,
-        fontWeight: fontweight,
-        overflow: overflow,
-      ),
+          color: color,
+          fontSize: fontsize,
+          fontWeight: fontweight,
+          overflow: overflow,
+          fontFamily: fonttype == FontType.aboretofont
+              ? GoogleFonts.aboreto().fontFamily
+              : GoogleFonts.roboto().fontFamily),
     ),
   );
 }
+
+enum FontType { roboto, aboretofont }
 
 Widget iconWidget({
   required IconData icon,
@@ -82,5 +89,17 @@ Widget iconWidget({
         color: color,
       ),
     ),
+  );
+}
+
+Widget materialButton({
+  required Widget child,
+}) {
+  return Material(
+    elevation: 3,
+    borderOnForeground: false,
+    type: MaterialType.circle,
+    color: Colors.white,
+    child: child,
   );
 }

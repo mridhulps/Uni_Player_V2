@@ -1,35 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:uni_player_2/Refactory/widgets.dart';
-import 'package:uni_player_2/app_Global_const/const.dart';
 
 class AppbarCustom extends StatelessWidget {
-  final GlobalKey<ScaffoldState> scaffkey;
-
-  const AppbarCustom({Key? key, required this.scaffkey}) : super(key: key);
+  final double? paddingbottom;
+  const AppbarCustom({Key? key, this.paddingbottom}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: ConstColor.backgroundcolor,
-      automaticallyImplyLeading: false,
-      centerTitle: true,
-      leading: iconWidget(
-        icon: Icons.menu_rounded,
-        ontap: () => scaffkey.currentState?.openDrawer(),
+    return Padding(
+      padding: EdgeInsets.only(bottom: paddingbottom ?? 0),
+      child: AppBar(
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        leading: iconWidget(
+          icon: Icons.menu_rounded,
+          ontap: () => Scaffold.of(context).openDrawer(),
+        ),
+        title: Text('playing',
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                fontWeight: FontWeight.bold,
+                fontFamily: GoogleFonts.aboreto().fontFamily)),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: iconWidget(icon: Icons.menu_rounded),
+          )
+        ],
       ),
-      title: Text(
-        'playing',
-        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-            fontFamily: GoogleFonts.aboreto().fontFamily,
-            fontWeight: FontWeight.bold),
-      ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 15),
-          child: iconWidget(icon: Icons.menu_rounded),
-        )
-      ],
     );
   }
 }
