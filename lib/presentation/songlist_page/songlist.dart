@@ -3,11 +3,15 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:uni_player_2/Refactory/funtions.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
 import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
+import 'package:uni_player_2/core/permission_acess.dart';
+
+import 'package:uni_player_2/presentation/songlist_page/widgets/permission_container.dart';
 
 class MusicListScreen extends StatelessWidget {
   const MusicListScreen({super.key});
@@ -16,17 +20,8 @@ class MusicListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<SongListBloc>().add(GetsonglistEvent());
-    });
-
-    return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(imageurl),
-            fit: BoxFit.cover,
-          ),
-          borderRadius: BorderRadius.circular(30)),
+    return imageContainer(
+      image: imageurl,
       child: Scaffold(
         backgroundColor: Colors.transparent.withOpacity(0.2),
         //DRAWER;
@@ -72,37 +67,52 @@ class MusicListScreen extends StatelessWidget {
                       ),
                     ),
                     //SONG LIST CONTAINER;
-                    Expanded(
-                      child: BlocBuilder<SongListBloc, SongListState>(
-                        builder: (context, state) {
-                          return ListView.separated(
+                    BlocBuilder<SongListBloc, SongListState>(
+                      builder: (context, state) {
+                        if (state.isLoading == true) {
+                          return const Center(
+                            child: CircularProgressIndicator(
+                              color: ConstColor.whitecolor,
+                              strokeWidth: 5,
+                            ),
+                          );
+                        } else if (state.isFailure) {
+                          return const Expanded(
+                            child: Center(
+                              child: CustomText(
+                                string: 'SomeThing Went Wrong',
+                                color: Colors.white,
+                                fontweight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        } else if (state.songList.isEmpty) {
+                          return const Expanded(
+                            child: Center(
+                              child: CustomText(
+                                string: 'Nothing Found',
+                                color: Colors.white,
+                                fontweight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        } else if (state.permissionstat ==
+                            PermissionType.initial) {
+                          return const Expanded(child: Permissioncontainer());
+                        }
+                        return
+
+                            //PERMISSION GRANDED;
+                            Expanded(
+                          child: ListView.separated(
                               physics: const BouncingScrollPhysics(),
                               itemBuilder: (context, index) {
                                 final song = state.songList[index];
 
-                                if (state.isLoading == true) {
-                                  return const Center(
-                                    child: CircularProgressIndicator(
-                                      color: ConstColor.whitecolor,
-                                      strokeWidth: 5,
-                                    ),
-                                  );
-                                } else if (state.isFailure) {
-                                  return Center(
-                                    child: textwidget(
-                                        string: 'SomeThing Went Wrong'),
-                                  );
-                                } else if (state.songList.isEmpty) {
-                                  return Center(
-                                    child: textwidget(string: 'Nothing Found'),
-                                  );
-                                }
-
                                 return ListTile(
                                   leading: iconWidget(icon: Icons.music_note),
-                                  title: textwidget(
+                                  title: CustomText(
                                       string: song.displayNameWOExt,
-                                      fonttype: FontType.roboto,
                                       fontweight: FontWeight.bold,
                                       color: ConstColor.whitecolor),
                                   subtitle: Text(
@@ -118,9 +128,10 @@ class MusicListScreen extends StatelessWidget {
                               separatorBuilder: (context, index) {
                                 return const SizedBox();
                               },
-                              itemCount: state.songList.length);
-                        },
-                      ),
+                              itemCount: state.songList.length),
+                        );
+                        //SHOW ALLOW PERMISSION BUTTON;
+                      },
                     ),
                   ],
                 ),

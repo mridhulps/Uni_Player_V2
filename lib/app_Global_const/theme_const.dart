@@ -11,6 +11,6 @@ class AppTheme {
           color: Colors.white,
         ),
         textTheme: const TextTheme(titleLarge: TextStyle(color: Colors.white)),
-        fontFamily: GoogleFonts.roboto().fontFamily);
+        fontFamily: GoogleFonts.aboreto().fontFamily);
   }
 }

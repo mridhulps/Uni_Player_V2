@@ -1,8 +1,10 @@
 //MUSIC CONTROLL PLAY/PAUSE MORE CONTAINER;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
+import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
 
 class ControllSystem extends StatelessWidget {
   const ControllSystem({super.key});

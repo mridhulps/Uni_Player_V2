@@ -12,18 +12,18 @@ class DurationBar extends StatelessWidget {
       child: Column(
         children: [
           //DURATION TIME;
-          Padding(
-            padding: const EdgeInsets.only(
+          const Padding(
+            padding: EdgeInsets.only(
               top: 10,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                textwidget(
+                CustomText(
                     string: '0.00',
                     paddingleft: 20,
                     fontweight: FontWeight.bold),
-                textwidget(
+                CustomText(
                     string: '2.24',
                     paddingright: 20,
                     fontweight: FontWeight.bold)
