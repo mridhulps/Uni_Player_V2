@@ -3,20 +3,48 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+
 import 'package:uni_player_2/Refactory/funtions.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
 import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
-import 'package:uni_player_2/core/permission_acess.dart';
+import 'package:uni_player_2/presentation/songlist_page/widgets/build_state.dart';
+import 'package:uni_player_2/presentation/songlist_page/widgets/songlist_widgets.dart';
 
-import 'package:uni_player_2/presentation/songlist_page/widgets/permission_container.dart';
-
-class MusicListScreen extends StatelessWidget {
+class MusicListScreen extends StatefulWidget {
   const MusicListScreen({super.key});
 
+  @override
+  State<MusicListScreen> createState() => _MusicListScreenState();
+}
+
+class _MusicListScreenState extends State<MusicListScreen> {
   final String imageurl = 'https://wallpapercave.com/wp/wp5121792.jpg';
+
+  List<SongModel> songlist = [];
+  final OnAudioQuery querysong = OnAudioQuery();
+
+  list() async {
+    print('list called');
+    songlist.clear();
+    songlist = await querysong.querySongs(
+        sortType: SongSortType.DATE_ADDED,
+        orderType: OrderType.DESC_OR_GREATER,
+        uriType: UriType.EXTERNAL,
+        ignoreCase: true);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // list();
+
+    context.read<SongListBloc>().add(GetSonglist());
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +60,7 @@ class MusicListScreen extends StatelessWidget {
               filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
               child: SizedBox(
                 child: Column(
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                     AppBar(
                       backgroundColor: Colors.transparent,
@@ -67,72 +96,9 @@ class MusicListScreen extends StatelessWidget {
                       ),
                     ),
                     //SONG LIST CONTAINER;
-                    BlocBuilder<SongListBloc, SongListState>(
-                      builder: (context, state) {
-                        if (state.isLoading == true) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: ConstColor.whitecolor,
-                              strokeWidth: 5,
-                            ),
-                          );
-                        } else if (state.isFailure) {
-                          return const Expanded(
-                            child: Center(
-                              child: CustomText(
-                                string: 'SomeThing Went Wrong',
-                                color: Colors.white,
-                                fontweight: FontWeight.bold,
-                              ),
-                            ),
-                          );
-                        } else if (state.songList.isEmpty) {
-                          return const Expanded(
-                            child: Center(
-                              child: CustomText(
-                                string: 'Nothing Found',
-                                color: Colors.white,
-                                fontweight: FontWeight.bold,
-                              ),
-                            ),
-                          );
-                        } else if (state.permissionstat ==
-                            PermissionType.initial) {
-                          return const Expanded(child: Permissioncontainer());
-                        }
-                        return
+                    // const BuildSongList()
 
-                            //PERMISSION GRANDED;
-                            Expanded(
-                          child: ListView.separated(
-                              physics: const BouncingScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                final song = state.songList[index];
-
-                                return ListTile(
-                                  leading: iconWidget(icon: Icons.music_note),
-                                  title: CustomText(
-                                      string: song.displayNameWOExt,
-                                      fontweight: FontWeight.bold,
-                                      color: ConstColor.whitecolor),
-                                  subtitle: Text(
-                                    song.artist ?? '<Unknown>',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(color: Colors.grey.shade600),
-                                  ),
-                                  trailing: iconWidget(icon: Icons.more_vert),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return const SizedBox();
-                              },
-                              itemCount: state.songList.length),
-                        );
-                        //SHOW ALLOW PERMISSION BUTTON;
-                      },
-                    ),
+                    const BuildSongList()
                   ],
                 ),
               ),

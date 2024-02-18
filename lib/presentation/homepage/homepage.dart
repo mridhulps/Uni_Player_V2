@@ -2,9 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:uni_player_2/Refactory/funtions.dart';
 import 'package:uni_player_2/Refactory/widgets.dart';
-import 'package:uni_player_2/global/domain/instances/instance.dart';
+import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
 
 import 'package:uni_player_2/presentation/homepage/widgets/appbar.dart';
 import 'package:uni_player_2/presentation/homepage/widgets/artwork_image.dart';
@@ -19,9 +21,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final some = Instances();
-    print(some.toString());
-
     return imageContainer(
       image: imageurl,
       child: Scaffold(

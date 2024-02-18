@@ -2,13 +2,12 @@ part of 'song_list_bloc.dart';
 
 abstract class SongListEvent {}
 
-class PermissionAccess extends SongListEvent {
-  final BuildContext context;
-  PermissionAccess({required this.context});
-}
+class GrandedPermission extends SongListEvent {}
+
+class DeniedPermission extends SongListEvent {}
+
+class PermenentDeniedPermission extends SongListEvent {}
 
 class GetSonglist extends SongListEvent {
-  final bool? permissiongranded;
-
-  GetSonglist({this.permissiongranded});
+  GetSonglist();
 }

@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
 
 import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
+import 'package:uni_player_2/core/permission_acess.dart';
+import 'package:uni_player_2/global/Locator/locator.dart';
 
 class Permissioncontainer extends StatelessWidget {
   const Permissioncontainer({
     super.key,
   });
-
-  final String requisttext = 'please Allow to Access Permission';
-  final String allowtext = 'Allow';
-  final String settingtext = 'Open Settings';
-  final String errortext = 'Permission Denied';
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +21,9 @@ class Permissioncontainer extends StatelessWidget {
         return SizedBox(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             CustomText(
-              string: requisttext,
+              string: state.permissionstat == PermissionType.denied
+                  ? 'Permission Denied'
+                  : 'Please Allow to Access Permission',
               color: Colors.white70,
               texttype: TextType.titleMedium,
               fontweight: FontWeight.bold,
@@ -33,12 +33,14 @@ class Permissioncontainer extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                context
-                    .read<SongListBloc>()
-                    .add(PermissionAccess(context: context));
+                locator
+                    .get<BetterPermission>()
+                    .status(Permission.storage, context);
               },
               child: CustomText(
-                string: allowtext,
+                string: state.permissionstat == PermissionType.denied
+                    ? "oppenSettings"
+                    : "allow  ",
                 paddingtop: 10,
                 paddingbottom: 10,
                 fontweight: FontWeight.bold,

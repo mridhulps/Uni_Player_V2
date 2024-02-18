@@ -14,14 +14,15 @@ class SongListServiceImp extends SonglistService {
     final querysong = locator.get<Instances>().audioQuery;
 
     try {
-      final songlist = querysong.querySongs(
+      final songlist = await querysong.querySongs(
           sortType: SongSortType.DATE_ADDED,
           orderType: OrderType.DESC_OR_GREATER,
           uriType: UriType.EXTERNAL,
           ignoreCase: true);
 
-      return right(await songlist);
+      return right(songlist);
     } catch (e) {
+      print('error catched in songlistserviceIemp');
       return left(SongListError(failure: 'GetsonglistError - ${e.toString()}'));
     }
   }

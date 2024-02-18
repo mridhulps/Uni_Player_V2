@@ -1,23 +1,38 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:permission_handler/permission_handler.dart';
+import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
 
-class StatPermissions {
-  Future<PermissionType> status(Permission permission) async {
-    final stat = await permission.status;
+class BetterPermission {
+  Future status(Permission permissionstat, BuildContext context) async {
+    if (await permissionstat.isGranted) {
+      print('granded');
 
-    PermissionType type = PermissionType.initial;
+      BlocProvider.of<SongListBloc>(context).add(GetSonglist());
+    } else if (await permissionstat.isDenied) {
+      print('denied');
 
-    if (!stat.isGranted) {
-      final isgrand = await permission.request();
+      final stat = await permissionstat.request();
 
-      if (isgrand.isGranted) {
-        return type = PermissionType.granded;
-      } else if (isgrand.isDenied) {
-        return type = PermissionType.denied;
+      if (stat.isGranted) {
+        BlocProvider.of<SongListBloc>(context).add(GetSonglist());
       } else {
-        return PermissionType.permanentdenied;
+        BlocProvider.of<SongListBloc>(context).add(DeniedPermission());
+      }
+    } else {
+      print('permanent denied');
+
+      final istrue = await openAppSettings();
+
+      if (istrue == true) {
+        BlocProvider.of<SongListBloc>(context).add(GetSonglist());
+      } else {
+        BlocProvider.of<SongListBloc>(context).add(PermenentDeniedPermission());
       }
     }
-    return type;
   }
 }
 
@@ -26,4 +41,25 @@ enum PermissionType {
   granded,
   denied,
   permanentdenied,
+}
+
+class PermissionBox {
+  Future<PermissionType> status(
+      Permission permissionstat, BuildContext context) async {
+    PermissionType access = PermissionType.initial;
+
+    if (!await permissionstat.isGranted) {
+      final grand = await permissionstat.request();
+
+      if (grand.isGranted) {
+        access = PermissionType.granded;
+      } else {
+        access = PermissionType.denied;
+      }
+    } else if (await permissionstat.isDenied ||
+        await permissionstat.isPermanentlyDenied) {
+      access = PermissionType.denied;
+    }
+    return access;
+  }
 }

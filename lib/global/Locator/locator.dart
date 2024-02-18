@@ -11,7 +11,7 @@ final locator = GetIt.asNewInstance();
 void getItconfigure() {
   locator.registerSingleton<Instances>(Instances());
 
-  locator.registerSingleton<StatPermissions>(StatPermissions());
+  locator.registerSingleton<BetterPermission>(BetterPermission());
 
   locator.registerSingleton<SongListServiceImp>(SongListServiceImp());
 }
