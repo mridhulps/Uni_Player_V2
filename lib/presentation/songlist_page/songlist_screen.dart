@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:uni_player_2/Refactory/funtions.dart';
 
@@ -11,47 +10,22 @@ import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
 import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
 import 'package:uni_player_2/presentation/songlist_page/widgets/build_state.dart';
-import 'package:uni_player_2/presentation/songlist_page/widgets/songlist_widgets.dart';
 
-class MusicListScreen extends StatefulWidget {
-  const MusicListScreen({super.key});
+class MusicListScreen extends StatelessWidget {
+  const MusicListScreen({
+    super.key,
+  });
 
-  @override
-  State<MusicListScreen> createState() => _MusicListScreenState();
-}
-
-class _MusicListScreenState extends State<MusicListScreen> {
   final String imageurl = 'https://wallpapercave.com/wp/wp5121792.jpg';
-
-  List<SongModel> songlist = [];
-  final OnAudioQuery querysong = OnAudioQuery();
-
-  list() async {
-    print('list called');
-    songlist.clear();
-    songlist = await querysong.querySongs(
-        sortType: SongSortType.DATE_ADDED,
-        orderType: OrderType.DESC_OR_GREATER,
-        uriType: UriType.EXTERNAL,
-        ignoreCase: true);
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    // list();
-
-    context.read<SongListBloc>().add(GetSonglist());
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<SongListBloc>().add(GetSonglist());
+    });
     return imageContainer(
-      image: imageurl,
       child: Scaffold(
-        backgroundColor: Colors.transparent.withOpacity(0.2),
+        backgroundColor: Colors.transparent,
         //DRAWER;
         body: Drawer(
             width: screnRatio(context: context).width,
@@ -95,10 +69,9 @@ class _MusicListScreenState extends State<MusicListScreen> {
                         ),
                       ),
                     ),
-                    //SONG LIST CONTAINER;
-                    // const BuildSongList()
+                    //SONG LIST build CONTAINER;
 
-                    const BuildSongList()
+                    const BuildSongList(),
                   ],
                 ),
               ),

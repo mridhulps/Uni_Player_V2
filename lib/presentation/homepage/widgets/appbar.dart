@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
+import 'package:uni_player_2/presentation/testingpage.dart';
 
 class AppbarCustom extends StatelessWidget {
   final double? paddingbottom;
@@ -26,7 +27,11 @@ class AppbarCustom extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20),
-            child: iconWidget(icon: Icons.menu_rounded),
+            child: iconWidget(
+              icon: Icons.menu_rounded,
+              ontap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (ctx) =>  TestingScreen())),
+            ),
           )
         ],
       ),

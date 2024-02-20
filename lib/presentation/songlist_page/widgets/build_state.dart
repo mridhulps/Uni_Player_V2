@@ -16,7 +16,6 @@ class BuildSongList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SongListBloc, SongListState>(
       builder: (context, state) {
-        print('bloc builder called');
         if (state.isLoading == true) {
           return const Expanded(
             child: Center(
@@ -52,8 +51,6 @@ class BuildSongList extends StatelessWidget {
             songlist: state.songList,
           ));
         }
-
-        //SHOW ALLOW PERMISSION BUTTON;
       },
     );
   }

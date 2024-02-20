@@ -2,9 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
-import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
+import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
 
 class ControllSystem extends StatelessWidget {
   const ControllSystem({super.key});
@@ -24,22 +25,32 @@ class ControllSystem extends StatelessWidget {
               size: 40,
             ),
           ),
-          Material(
-            elevation: 3,
-            borderOnForeground: false,
-            type: MaterialType.circle,
-            color: Colors.white,
-            child: iconWidget(
-              icon: Icons.play_arrow_rounded,
-              color: ConstColor.buttoncolor,
-              size: 60,
+          InkWell(
+            onTap: () {
+              context
+                  .read<HomepageBloc>()
+                  .add(PlayAndPauseEvent(isplaying: false));
+            },
+            child: Material(
+              elevation: 3,
+              borderOnForeground: false,
+              type: MaterialType.circle,
+              color: Colors.white,
+              child: iconWidget(
+                icon: Icons.play_arrow_rounded,
+                color: ConstColor.buttoncolor,
+                size: 60,
+              ),
             ),
           ),
-          materialButton(
-            child: iconWidget(
-              icon: Icons.skip_next_rounded,
-              color: ConstColor.buttoncolor,
-              size: 40,
+          InkWell(
+            onTap: () {},
+            child: materialButton(
+              child: iconWidget(
+                icon: Icons.skip_next_rounded,
+                color: ConstColor.buttoncolor,
+                size: 40,
+              ),
             ),
           ),
         ],

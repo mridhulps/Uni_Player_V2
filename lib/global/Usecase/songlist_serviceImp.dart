@@ -15,7 +15,7 @@ class SongListServiceImp extends SonglistService {
 
     try {
       final songlist = await querysong.querySongs(
-          sortType: SongSortType.DATE_ADDED,
+          sortType: SongSortType.ALBUM,
           orderType: OrderType.DESC_OR_GREATER,
           uriType: UriType.EXTERNAL,
           ignoreCase: true);

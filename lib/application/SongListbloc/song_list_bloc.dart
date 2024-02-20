@@ -38,17 +38,6 @@ class SongListBloc extends Bloc<SongListEvent, SongListState> {
 
   // GET SONGLIST MODEL FROM PACKAGE;
   getSongList(GetSonglist event, Emitter<SongListState> emit) async {
-    // OnAudioQuery querysong = OnAudioQuery();
-
-    // final songlist = await querysong.querySongs(
-    //     sortType: SongSortType.DATE_ADDED,
-    //     orderType: OrderType.DESC_OR_GREATER,
-    //     uriType: UriType.EXTERNAL,
-    //     ignoreCase: true);
-
-    // return emit(state.copyWith(
-    //     isFailures: false, isloadings: false, songlist: songlist));
-
     emit(state.copyWith(
         isloadings: true, permissiontype: PermissionType.granded));
 
@@ -58,7 +47,7 @@ class SongListBloc extends Bloc<SongListEvent, SongListState> {
       return emit(
           state.copyWith(isFailures: true, isloadings: false, songlist: []));
     }, (list) async {
-      emit(
+      return emit(
           state.copyWith(isFailures: false, isloadings: false, songlist: list));
     });
   }

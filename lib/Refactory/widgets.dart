@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:uni_player_2/app_Global_const/const.dart';
+import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
 
 class CustomContainer extends StatelessWidget {
   final double? width;
@@ -50,9 +55,9 @@ class CustomContainer extends StatelessWidget {
 
 // THIS WIDGET USE FOR SONG ARTWORK IMAGE USE IN FULL SCREEN AND MAINLY USE FOR ACCESS TO ERRORBUILDER METHODE;
 
-Widget imageContainer({required Widget child, String? image}) {
+Widget imageContainer({required Widget child, String? image, int? artworkId}) {
   return Container(
-    child: image == null
+    child: image == null || image.isEmpty
         ? Center(
             child: child,
           )
@@ -69,6 +74,52 @@ Widget imageContainer({required Widget child, String? image}) {
           ]),
   );
 }
+
+enum ImageType { defaulte, image, artworkId }
+
+// Widget imageContainer2(
+//     {required Widget child,
+//     String? image,
+//     int? artworkId,
+//     ImageType imagetype = ImageType.defaulte}) {
+//   return Container(
+//       child: imagetype == ImageType.defaulte
+//           ? (image == null || image.isNotEmpty || artworkId != null)
+//               ? throw Exception('image type is defaulte')
+//               : Center(
+//                   child: child,
+//                 )
+//           : imagetype == ImageType.image
+//               ? (image == null || image.isEmpty)
+//                   ? throw Exception('image is null')
+//                   : Stack(fit: StackFit.expand, children: [
+//                       Image(
+//                           image: NetworkImage(image),
+//                           fit: BoxFit.cover,
+//                           errorBuilder: (context, error, stackTrace) =>
+//                               Container(
+//                                 color: ConstColor.backgroundcolor,
+//                               )),
+//                       Center(
+//                         child: child,
+//                       )
+//                     ])
+//               : imagetype == ImageType.artworkId
+//                   ? (artworkId == null)
+//                       ? Stack(fit: StackFit.expand, children: [
+//                           onlyqueryArtwork(artworkId: artworkId!),
+//                           Center(
+//                             child: child,
+//                           )
+//                         ])
+//                       : Stack(fit: StackFit.expand, children: [
+//                           onlyqueryArtwork(artworkId: artworkId),
+//                           Center(
+//                             child: child,
+//                           )
+//                         ])
+//                   : Container());
+// }
 
 //TEXT REFACTOR WIDGET;
 class CustomText extends StatelessWidget {
@@ -193,5 +244,51 @@ Widget materialButton({
     type: MaterialType.circle,
     color: Colors.white,
     child: child,
+  );
+}
+
+Widget artWorkContainer({Widget? child}) {
+  return SizedBox(
+    child: Stack(fit: StackFit.expand, children: [
+      BlocBuilder<HomepageBloc, HomepageState>(
+        builder: (context, state) {
+          return onlyqueryArtwork(artworkId: state.artworkId);
+        },
+      ),
+      Center(
+        child: child,
+      )
+    ]),
+  );
+}
+
+//QUERYARTWORKIDGET;
+
+Widget onlyqueryArtwork(
+    {required int artworkId,
+    bool? isNullwidgetMusicNote = false,
+    double? musicnotesize = 0.0}) {
+  return QueryArtworkWidget(
+    id: artworkId,
+    type: ArtworkType.AUDIO,
+    artworkQuality: FilterQuality.high,
+    artworkFit: BoxFit.fill,
+    quality: 100,
+    artworkBorder: BorderRadius.circular(20),
+    nullArtworkWidget: isNullwidgetMusicNote == false
+        ? Container(
+            color: ConstColor.backgroundcolor,
+          )
+        : iconWidget(icon: Icons.music_note, size: musicnotesize),
+    errorBuilder: (p0, p1, p2) {
+      log('artworkErrorbuilder called, object(${p1.toString()}),stacktrace(${p2.toString()})');
+      return CircleAvatar(
+        backgroundColor: Colors.transparent,
+        child: iconWidget(
+            icon: Icons.music_note_rounded,
+            color: ConstColor.backgroundcolor,
+            size: 100),
+      );
+    },
   );
 }
