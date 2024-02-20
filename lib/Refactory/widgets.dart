@@ -250,8 +250,9 @@ Widget materialButton({
 Widget artWorkContainer({Widget? child}) {
   return SizedBox(
     child: Stack(fit: StackFit.expand, children: [
-      BlocBuilder<HomepageBloc, HomepageState>(
+      BlocBuilder<HomepageBloc, ArtworkState>(
         builder: (context, state) {
+          log('artwoek bloc builded');
           return onlyqueryArtwork(artworkId: state.artworkId);
         },
       ),

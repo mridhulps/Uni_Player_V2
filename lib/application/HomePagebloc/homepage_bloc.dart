@@ -9,8 +9,8 @@ import 'package:uni_player_2/global/domain/instances/instance.dart';
 part 'homepage_event.dart';
 part 'homepage_state.dart';
 
-class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
-  HomepageBloc() : super(HomepageInitial()) {
+class HomepageBloc extends Bloc<HomepageEvent, ArtworkState> {
+  HomepageBloc() : super(ArtworkStateInitial()) {
     final audioplayer = locator.get<Instances>().audioplayer;
 
     on<PlaySongEvent>((event, emit) => playSong(event, emit, audioplayer));
@@ -23,10 +23,8 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
       AudioPlayer audioplayer) async {
     log(audioplayer.playerState.playing.toString());
 
-    emit(HomepageState(
-      artworkId: event.artworkId,
-      isLoading: false,
-      currentIndex: event.currentIndex,
+    emit(state.copyWith(
+      artworkid: event.artworkId,
     ));
 
     await audioplayer.setUrl(event.currentsonguri);
@@ -37,9 +35,11 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
   playAndpause(PlayAndPauseEvent event, Emitter<HomepageState> emit,
       AudioPlayer audioplayer) async {
     if (audioplayer.playerState.playing == true) {
-      await audioplayer.pause();
+      audioplayer.pause();
+      return emit(PlayingState(isPlaying: false));
     } else {
-      await audioplayer.play();
+      audioplayer.play();
+      return emit(PlayingState(isPlaying: true));
     }
   }
 }

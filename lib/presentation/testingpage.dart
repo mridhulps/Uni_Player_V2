@@ -11,11 +11,11 @@ class TestingScreen extends StatelessWidget {
 
   final String imageurl = 'https://wallpapercave.com/wp/wp5121792.jpg';
 
-  final artworkid = locator.get<HomepageState>().artworkId;
+  //final artworkid = locator.get<HomepageState>().artworkId;
 
   @override
   Widget build(BuildContext context) {
-    log(artworkid.toString());
+  
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
