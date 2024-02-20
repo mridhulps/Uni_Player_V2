@@ -55,7 +55,13 @@ class HomePage extends StatelessWidget {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 // ARTWORK CONTAINER ;
-                                BlocBuilder<HomepageBloc, ArtworkState>(
+                                BlocBuilder<HomepageBloc, HomepageState>(
+                                  buildWhen: (previous, current) {
+                                    final ischanged =
+                                        previous.artworkId != current.artworkId;
+
+                                    return ischanged;
+                                  },
                                   builder: (context, state) {
                                     return ArtWorkWidget(
                                       artworkId: state.artworkId,

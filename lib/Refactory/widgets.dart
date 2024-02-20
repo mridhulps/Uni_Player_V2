@@ -237,13 +237,16 @@ Widget iconWidget({
 //USE FOR ALL ELAVATION BUTTONS;
 Widget materialButton({
   required Widget child,
+  double? radius,
+  Color? buttoncolor = Colors.white,
 }) {
   return Material(
     elevation: 3,
     borderOnForeground: false,
     type: MaterialType.circle,
     color: Colors.white,
-    child: child,
+    child: CircleAvatar(
+        backgroundColor: buttoncolor, radius: radius, child: child),
   );
 }
 
@@ -251,6 +254,11 @@ Widget artWorkContainer({Widget? child}) {
   return SizedBox(
     child: Stack(fit: StackFit.expand, children: [
       BlocBuilder<HomepageBloc, HomepageState>(
+        buildWhen: (previous, current) {
+          final ischanged = previous.artworkId != current.artworkId;
+
+          return ischanged;
+        },
         builder: (context, state) {
           return onlyqueryArtwork(artworkId: state.artworkId);
         },

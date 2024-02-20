@@ -14,7 +14,5 @@ class PlaySongEvent extends HomepageEvent {
 }
 
 class PlayAndPauseEvent extends HomepageEvent {
-  bool isplaying;
-
-  PlayAndPauseEvent({required this.isplaying});
+  PlayAndPauseEvent();
 }

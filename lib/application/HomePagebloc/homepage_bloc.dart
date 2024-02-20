@@ -23,11 +23,7 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
       AudioPlayer audioplayer) async {
     log(audioplayer.playerState.playing.toString());
 
-    emit(HomepageState(
-      artworkId: event.artworkId,
-      isLoading: false,
-      currentIndex: event.currentIndex,
-    ));
+    emit(state.copyWith(artworkId: event.artworkId,isplaying: true));
 
     await audioplayer.setUrl(event.currentsonguri);
 
@@ -37,9 +33,11 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
   playAndpause(PlayAndPauseEvent event, Emitter<HomepageState> emit,
       AudioPlayer audioplayer) async {
     if (audioplayer.playerState.playing == true) {
-      await audioplayer.pause();
+      emit(state.copyWith(isplaying: false));
+      audioplayer.pause();
     } else {
-      await audioplayer.play();
+      emit(state.copyWith(isplaying: true));
+      audioplayer.play();
     }
   }
 }
