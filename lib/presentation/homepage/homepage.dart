@@ -68,21 +68,25 @@ class HomePage extends StatelessWidget {
                                     );
                                   },
                                 ),
-                                //SPACER;
 
-                                const CustomContainer(
-                                  color: Colors.transparent,
-                                  child: CustomText(
-                                    string: 'Eradaze - Not Like That',
-                                    color: Colors.white,
-                                    fonttype: FontType.aboretofont,
-                                    texttype: TextType.titleMedium,
-                                    fontweight: FontWeight.bold,
-                                  ),
+                                BlocBuilder<HomepageBloc, HomepageState>(
+                                  builder: (context, state) {
+                                    return CustomContainer(
+                                      color: Colors.transparent,
+                                      child: CustomText(
+                                        paddingleft: 10,
+                                        string: state.currentsongtitle ?? '',
+                                        color: Colors.white,
+                                        fonttype: FontType.aboretofont,
+                                        texttype: TextType.titleMedium,
+                                        fontweight: FontWeight.bold,
+                                      ),
+                                    );
+                                  },
                                 ),
 
                                 //DURATION CONTAINER;
-                                DurationBar()
+                                const DurationBar()
                               ],
                             ))),
 
@@ -95,7 +99,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ),
-        drawer: MusicListScreen(),
+        drawer: const MusicListScreen(),
       ),
     );
   }

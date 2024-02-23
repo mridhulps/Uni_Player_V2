@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:uni_player_2/Refactory/funtions.dart';
 
 import 'package:uni_player_2/app_Global_const/const.dart';
 import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
+import 'package:uni_player_2/global/Locator/locator.dart';
+import 'package:uni_player_2/global/Usecase/songlist_serviceImp.dart';
+import 'package:uni_player_2/global/domain/instances/instance.dart';
 
 class CustomContainer extends StatelessWidget {
   final double? width;
@@ -270,12 +274,38 @@ Widget artWorkContainer({Widget? child}) {
   );
 }
 
+// Widget artWorkContainer({Widget? child}) {
+//   return SizedBox(
+//     child: Stack(fit: StackFit.expand, children: [
+//       StreamBuilder<int?>(
+//         stream: locator.get<Instances>().audioplayer.currentIndexStream,
+//         builder: (context, state) {
+//           if (state.data == null || state.hasError) {
+//             final data =
+//                 locator.get<SongListServiceImp>().modelList[state.data!].id;
+//             return onlyqueryArtwork(
+//                 artworkId: data, isNullwidgetMusicNote: true);
+//           }
+//           final data =
+//               locator.get<SongListServiceImp>().modelList[state.data!].id;
+//           log(data.toString());
+//           return onlyqueryArtwork(artworkId: data);
+//         },
+//       ),
+//       Center(
+//         child: child,
+//       )
+//     ]),
+//   );
+// }
+
 //QUERYARTWORKIDGET;
 
 Widget onlyqueryArtwork(
     {required int artworkId,
     bool? isNullwidgetMusicNote = false,
-    double? musicnotesize = 0.0}) {
+    double? musicnotesize = 0.0,
+    Color? musicnotcolor}) {
   return QueryArtworkWidget(
     id: artworkId,
     type: ArtworkType.AUDIO,
@@ -287,7 +317,13 @@ Widget onlyqueryArtwork(
         ? Container(
             color: ConstColor.backgroundcolor,
           )
-        : iconWidget(icon: Icons.music_note, size: musicnotesize),
+        : CircleAvatar(
+            backgroundColor: Colors.transparent,
+            child: iconWidget(
+                icon: Icons.music_note_rounded,
+                color: musicnotcolor ?? Colors.white,
+                size: musicnotesize),
+          ),
     errorBuilder: (p0, p1, p2) {
       log('artworkErrorbuilder called, object(${p1.toString()}),stacktrace(${p2.toString()})');
       return CircleAvatar(

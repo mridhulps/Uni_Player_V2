@@ -9,6 +9,8 @@ import 'package:uni_player_2/global/domain/instances/instance.dart';
 import 'package:uni_player_2/global/domain/songlist_service.dart';
 
 class SongListServiceImp extends SonglistService {
+  List<SongModel> modelList = [];
+
   @override
   Future<Either<SongListError, List<SongModel>>> getSongList() async {
     final querysong = locator.get<Instances>().audioQuery;
@@ -19,6 +21,8 @@ class SongListServiceImp extends SonglistService {
           orderType: OrderType.DESC_OR_GREATER,
           uriType: UriType.EXTERNAL,
           ignoreCase: true);
+
+      modelList.addAll(songlist);
 
       return right(songlist);
     } catch (e) {

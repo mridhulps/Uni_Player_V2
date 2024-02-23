@@ -46,7 +46,7 @@ class SongListBloc extends Bloc<SongListEvent, SongListState> {
     songlist.fold((error) {
       return emit(
           state.copyWith(isFailures: true, isloadings: false, songlist: []));
-    }, (list) async {
+    }, (list) {
       return emit(
           state.copyWith(isFailures: false, isloadings: false, songlist: list));
     });

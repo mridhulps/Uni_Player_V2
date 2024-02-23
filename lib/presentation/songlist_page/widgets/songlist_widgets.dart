@@ -42,9 +42,12 @@ class SongLIstWidget extends StatelessWidget {
             trailing: iconWidget(icon: Icons.more_vert),
             onTap: () {
               context.read<HomepageBloc>().add(PlaySongEvent(
-                  currentIndex: index,
-                  currentsonguri: song.uri ?? '',
-                  artworkId: song.id));
+                  currentsonguri: song.uri ?? '', currentIndex: index));
+
+              // context.read<HomepageBloc>().add(GetArtworkEvent(
+              //     artworkId: song.id, title: song.displayNameWOExt));
+
+              context.read<HomepageBloc>().add(IndexStreamEvent());
             },
           );
         },
