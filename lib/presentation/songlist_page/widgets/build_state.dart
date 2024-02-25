@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
-import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
+
 import 'package:uni_player_2/presentation/songlist_page/widgets/songlist_widgets.dart';
 
 import '../../../application/HomePagebloc/homepage_bloc.dart';
@@ -16,11 +16,12 @@ class BuildSongList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SongListBloc, SongListState>(
+    return BlocBuilder<HomepageBloc, HomepageState>(
+      buildWhen: (previous, current) {
+        return previous.alreadyLoaded == false ||
+            current.alreadyLoaded == false;
+      },
       builder: (context, state) {
-        context
-            .read<HomepageBloc>()
-            .add(GenerateAudioListEvent(songlist: state.songList));
         if (state.isLoading == true) {
           return const Expanded(
             child: Center(

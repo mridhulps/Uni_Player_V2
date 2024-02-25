@@ -254,17 +254,61 @@ Widget materialButton({
   );
 }
 
-Widget artWorkContainer({Widget? child}) {
+// Widget artWorkContainer({Widget? child}) {
+//   return SizedBox(
+//     child: Stack(fit: StackFit.expand, children: [
+//       BlocBuilder<HomepageBloc, HomepageState>(
+//         buildWhen: (previous, current) {
+//           final ischanged = previous.artworkId != current.artworkId;
+
+//           return ischanged;
+//         },
+//         builder: (context, state) {
+//           return onlyqueryArtwork(artworkId: state.artworkId);
+//         },
+//       ),
+//       Center(
+//         child: child,
+//       )
+//     ]),
+//   );
+// }
+
+Widget artWorkContainer(
+    {Widget? child,
+    bool? isnullwidgetMusicnote = false,
+    StreamNullWidget? isStreamNullWidget = StreamNullWidget.musicnote}) {
+  final list = locator.get<SongListServiceImp>().modelList;
   return SizedBox(
     child: Stack(fit: StackFit.expand, children: [
-      BlocBuilder<HomepageBloc, HomepageState>(
-        buildWhen: (previous, current) {
-          final ischanged = previous.artworkId != current.artworkId;
-
-          return ischanged;
-        },
+      StreamBuilder<int?>(
+        stream: locator.get<Instances>().audioplayer.currentIndexStream,
         builder: (context, state) {
-          return onlyqueryArtwork(artworkId: state.artworkId);
+          if (state.data == null || state.hasError) {
+            log('artwork is null form stream builder');
+
+            if (isStreamNullWidget == StreamNullWidget.musicnote) {
+              return CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: iconWidget(
+                    icon: Icons.music_note_rounded,
+                    color: ConstColor.backgroundcolor,
+                    size: 100),
+              );
+            } else {
+              return Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: ConstColor.backgroundcolor,
+              );
+            }
+          }
+
+          return onlyqueryArtwork(
+              artworkId: list[state.data ?? 0].id,
+              isNullwidgetMusicNote: isnullwidgetMusicnote,
+              musicnotcolor: ConstColor.backgroundcolor,
+              musicnotesize: 100);
         },
       ),
       Center(
@@ -274,30 +318,7 @@ Widget artWorkContainer({Widget? child}) {
   );
 }
 
-// Widget artWorkContainer({Widget? child}) {
-//   return SizedBox(
-//     child: Stack(fit: StackFit.expand, children: [
-//       StreamBuilder<int?>(
-//         stream: locator.get<Instances>().audioplayer.currentIndexStream,
-//         builder: (context, state) {
-//           if (state.data == null || state.hasError) {
-//             final data =
-//                 locator.get<SongListServiceImp>().modelList[state.data!].id;
-//             return onlyqueryArtwork(
-//                 artworkId: data, isNullwidgetMusicNote: true);
-//           }
-//           final data =
-//               locator.get<SongListServiceImp>().modelList[state.data!].id;
-//           log(data.toString());
-//           return onlyqueryArtwork(artworkId: data);
-//         },
-//       ),
-//       Center(
-//         child: child,
-//       )
-//     ]),
-//   );
-// }
+enum StreamNullWidget { plain, musicnote }
 
 //QUERYARTWORKIDGET;
 

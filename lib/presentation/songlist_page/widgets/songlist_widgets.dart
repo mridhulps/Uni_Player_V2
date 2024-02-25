@@ -47,7 +47,7 @@ class SongLIstWidget extends StatelessWidget {
               // context.read<HomepageBloc>().add(GetArtworkEvent(
               //     artworkId: song.id, title: song.displayNameWOExt));
 
-              context.read<HomepageBloc>().add(IndexStreamEvent());
+              // context.read<HomepageBloc>().add(IndexStreamEvent());
             },
           );
         },

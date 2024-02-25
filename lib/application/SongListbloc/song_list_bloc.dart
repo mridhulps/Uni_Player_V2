@@ -9,46 +9,46 @@ import 'package:uni_player_2/global/Usecase/songlist_serviceImp.dart';
 part 'song_list_event.dart';
 part 'song_list_state.dart';
 
-class SongListBloc extends Bloc<SongListEvent, SongListState> {
-  SongListBloc() : super(SongListInitial()) {
-    on<GrandedPermission>((event, emit) => grandedpermission(event, emit));
+// class SongListBloc extends Bloc<SongListEvent, SongListState> {
+//   SongListBloc() : super(SongListInitial()) {
+//     on<GrandedPermission>((event, emit) => grandedpermission(event, emit));
 
-    on<DeniedPermission>((event, emit) => deniedPermission(event, emit));
+//     on<DeniedPermission>((event, emit) => deniedPermission(event, emit));
 
-    on<PermenentDeniedPermission>(
-        (event, emit) => permenentDeniedPermission(event, emit));
+//     on<PermenentDeniedPermission>(
+//         (event, emit) => permenentDeniedPermission(event, emit));
 
-    on<GetSonglist>((event, emit) => getSongList(event, emit));
-  }
+//     on<GetSonglist>((event, emit) => getSongList(event, emit));
+//   }
 
   //REQUIST PERMISSION METHODE;
-  grandedpermission(
-      GrandedPermission event, Emitter<SongListState> emit) async {
-    return emit(state.copyWith(permissiontype: PermissionType.granded));
-  }
+//   grandedpermission(
+//       GrandedPermission event, Emitter<SongListState> emit) async {
+//     return emit(state.copyWith(permissiontype: PermissionType.granded));
+//   }
 
-  deniedPermission(DeniedPermission event, Emitter<SongListState> emit) {
-    return emit(state.copyWith(permissiontype: PermissionType.denied));
-  }
+//   deniedPermission(DeniedPermission event, Emitter<SongListState> emit) {
+//     return emit(state.copyWith(permissiontype: PermissionType.denied));
+//   }
 
-  permenentDeniedPermission(
-      PermenentDeniedPermission event, Emitter<SongListState> emit) {
-    return emit(state.copyWith(permissiontype: PermissionType.permanentdenied));
-  }
+//   permenentDeniedPermission(
+//       PermenentDeniedPermission event, Emitter<SongListState> emit) {
+//     return emit(state.copyWith(permissiontype: PermissionType.permanentdenied));
+//   }
 
-  // GET SONGLIST MODEL FROM PACKAGE;
-  getSongList(GetSonglist event, Emitter<SongListState> emit) async {
-    emit(state.copyWith(
-        isloadings: true, permissiontype: PermissionType.granded));
+//   // GET SONGLIST MODEL FROM PACKAGE;
+//   getSongList(GetSonglist event, Emitter<SongListState> emit) async {
+//     emit(state.copyWith(
+//         isloadings: true, permissiontype: PermissionType.granded));
 
-    final songlist = await locator.get<SongListServiceImp>().getSongList();
+//     final songlist = await locator.get<SongListServiceImp>().getSongList();
 
-    songlist.fold((error) {
-      return emit(
-          state.copyWith(isFailures: true, isloadings: false, songlist: []));
-    }, (list) {
-      return emit(
-          state.copyWith(isFailures: false, isloadings: false, songlist: list));
-    });
-  }
-}
+//     songlist.fold((error) {
+//       return emit(
+//           state.copyWith(isFailures: true, isloadings: false, songlist: []));
+//     }, (list) {
+//       return emit(
+//           state.copyWith(isFailures: false, isloadings: false, songlist: list));
+//     });
+//   }
+// }

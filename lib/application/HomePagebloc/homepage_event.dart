@@ -2,6 +2,8 @@ part of 'homepage_bloc.dart';
 
 abstract class HomepageEvent {}
 
+class GetSonglistEvnet extends HomepageEvent {}
+
 class PlaySongEvent extends HomepageEvent {
   final String currentsonguri;
   final int currentIndex;
@@ -25,9 +27,7 @@ class ForwardEvent extends HomepageEvent {}
 class BackwardEvent extends HomepageEvent {}
 
 class GenerateAudioListEvent extends HomepageEvent {
-  final List<SongModel> songlist;
-
-  GenerateAudioListEvent({required this.songlist});
+  GenerateAudioListEvent();
 }
 
 class IndexStreamEvent extends HomepageEvent {}

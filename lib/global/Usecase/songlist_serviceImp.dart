@@ -27,7 +27,10 @@ class SongListServiceImp extends SonglistService {
       return right(songlist);
     } catch (e) {
       print('error catched in songlistserviceIemp');
-      return left(SongListError(failure: 'GetsonglistError - ${e.toString()}'));
+      modelList = [];
+      return left(SongListError(
+        failure: 'GetsonglistError - ${e.toString()}',
+      ));
     }
   }
 }

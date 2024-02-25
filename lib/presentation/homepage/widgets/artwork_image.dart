@@ -1,7 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:on_audio_query/on_audio_query.dart';
+
 import 'package:uni_player_2/Refactory/funtions.dart';
 import 'package:uni_player_2/Refactory/widgets.dart';
 
@@ -11,8 +9,6 @@ class ArtWorkWidget extends StatelessWidget {
   final int artworkId;
 
   const ArtWorkWidget({super.key, required this.artworkId});
-
-  final String imageurl = 'https://wallpapercave.com/wp/wp5121792.jpg';
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +28,9 @@ class ArtWorkWidget extends StatelessWidget {
               width: screnRatio(context: context).width,
               height: screnRatio(context: context).width / 1.3,
               padding: const EdgeInsets.all(2),
-              child: onlyqueryArtwork(
-                  artworkId: artworkId,
-                  musicnotcolor: ConstColor.backgroundcolor,
-                  isNullwidgetMusicNote: true,
-                  musicnotesize: 100),
+              child: artWorkContainer(
+                isnullwidgetMusicnote: true,
+              ),
             ),
           ),
 

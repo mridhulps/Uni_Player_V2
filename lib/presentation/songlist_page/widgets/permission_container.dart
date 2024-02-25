@@ -4,8 +4,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
+import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
 
-import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
 import 'package:uni_player_2/core/permission_acess.dart';
 import 'package:uni_player_2/global/Locator/locator.dart';
 
@@ -16,7 +16,7 @@ class Permissioncontainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SongListBloc, SongListState>(
+    return BlocBuilder<HomepageBloc, HomepageState>(
       builder: (context, state) {
         return SizedBox(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [

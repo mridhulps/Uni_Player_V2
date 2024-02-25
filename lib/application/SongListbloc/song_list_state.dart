@@ -13,15 +13,15 @@ class SongListState {
       required this.songList});
 
   SongListState copyWith({
+    PermissionType? permissiontype,
     bool? isloadings,
     bool? isFailures,
-    PermissionType? permissiontype,
     List<SongModel>? songlist,
   }) {
     return SongListState(
+        permissionstat: permissiontype ?? permissionstat,
         isFailure: isFailures ?? isFailure,
         isLoading: isloadings ?? isLoading,
-        permissionstat: permissiontype ?? permissionstat,
         songList: songlist ?? songList);
   }
 }
@@ -29,8 +29,8 @@ class SongListState {
 final class SongListInitial extends SongListState {
   SongListInitial()
       : super(
+            permissionstat: PermissionType.initial,
             isLoading: false,
             isFailure: false,
-            permissionstat: PermissionType.initial,
             songList: []);
 }

@@ -16,11 +16,10 @@ import 'package:uni_player_2/presentation/songlist_page/songlist_screen.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  final String imageurl = 'https://wallpapercave.com/wp/wp5121792.jpg';
-
   @override
   Widget build(BuildContext context) {
     return artWorkContainer(
+      isStreamNullWidget: StreamNullWidget.plain,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: false,
