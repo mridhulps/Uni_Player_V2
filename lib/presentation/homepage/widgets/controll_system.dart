@@ -41,12 +41,6 @@ class ControllSystem extends StatelessWidget {
           StreamBuilder<PlayerState>(
             stream: player.playerStateStream,
             builder: (context, state) {
-              if (state.data!.processingState == ProcessingState.completed) {
-                log('complited');
-              } else {
-                log('bloc player  playing');
-              }
-
               if (state.data == null || state.hasError) {
                 log('plater state is null');
                 return materialButton(

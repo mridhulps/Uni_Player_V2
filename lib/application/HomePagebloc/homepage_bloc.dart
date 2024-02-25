@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,8 +23,6 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     on<PlayAndPauseEvent>(
         (event, emit) => playAndpause(event, emit, audioplayer));
 
-    on<GetArtworkEvent>((event, emit) => getArtwork(event, emit, audioplayer));
-
     on<ForwardEvent>((event, emit) => forWard(event, emit, audioplayer));
 
     on<BackwardEvent>((event, emit) => backWard(event, emit, audioplayer));
@@ -45,7 +42,7 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
 
     final songlist = await locator.get<SongListServiceImp>().getSongList();
 
-    songlist.fold((error) async {
+    songlist.fold((error) {
       return emit(
           state.copyWith(isFailures: true, isloadings: false, songlist: []));
     }, (list) {
@@ -77,27 +74,6 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
 
       emit(state.copyWith(isplaying: false, isFailures: true));
     }
-  }
-
-  getArtwork(
-      GetArtworkEvent event, Emitter<HomepageState> emit, AudioPlayer player) {
-    final songlist = locator.get<SongListServiceImp>().modelList;
-
-    player.currentIndexStream.listen((index) {
-      if (index == null) {
-        return;
-      } else {
-        final title = songlist[index].displayNameWOExt;
-        final artworkid = songlist[index].id;
-
-        log('currentindex $title');
-
-        return emit(state.copyWith(songtitle: title, artworkId: artworkid));
-      }
-    });
-
-    return emit(
-        state.copyWith(artworkId: event.artworkId, songtitle: event.title));
   }
 
   playAndpause(PlayAndPauseEvent event, Emitter<HomepageState> emit,
@@ -132,22 +108,5 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
         state.songList.map((e) => AudioSource.uri(Uri.parse(e.uri!))).toList();
 
     state.copyWith(audiosource: ConcatenatingAudioSource(children: list));
-  }
-
-  indexStream(AudioPlayer audioplayer, Emitter<HomepageState> emit) {
-    //   audioplayer.currentIndexStream.listen((event) {
-    //     log('currentindex $event');
-    //     if (event == null) {
-    //       return;
-    //     }
-
-    //     int artwork = state.songList[event].id;
-    //     String title = state.songList[event].displayNameWOExt;
-
-    //     log('artwork $artwork');
-    //     log('indexstream builded');
-
-    //     emit(state.copyWith(artworkId: artwork, songtitle: title));
-    //   });
   }
 }

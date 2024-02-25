@@ -278,11 +278,12 @@ Widget artWorkContainer(
     {Widget? child,
     bool? isnullwidgetMusicnote = false,
     StreamNullWidget? isStreamNullWidget = StreamNullWidget.musicnote}) {
+  final player = locator.get<Instances>().audioplayer;
   final list = locator.get<SongListServiceImp>().modelList;
   return SizedBox(
     child: Stack(fit: StackFit.expand, children: [
       StreamBuilder<int?>(
-        stream: locator.get<Instances>().audioplayer.currentIndexStream,
+        stream: player.currentIndexStream,
         builder: (context, state) {
           if (state.data == null || state.hasError) {
             log('artwork is null form stream builder');

@@ -85,7 +85,7 @@ class HomePage extends StatelessWidget {
                                 ),
 
                                 //DURATION CONTAINER;
-                                const DurationBar()
+                                DurationBar()
                               ],
                             ))),
 
