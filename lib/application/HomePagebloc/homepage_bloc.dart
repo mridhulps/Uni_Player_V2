@@ -64,7 +64,6 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
 
   playSong(PlaySongEvent event, Emitter<HomepageState> emit,
       AudioPlayer audioplayer) async {
-    log(state.audiosourceList.toString());
     try {
       audioplayer.setAudioSource(
           state.audiosourceList ?? ConcatenatingAudioSource(children: []),
