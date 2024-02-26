@@ -6,6 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uni_player_2/Refactory/funtions.dart';
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
+import 'package:uni_player_2/global/Locator/locator.dart';
+import 'package:uni_player_2/global/Usecase/songlist_serviceImp.dart';
+import 'package:uni_player_2/global/domain/instances/instance.dart';
 
 import 'package:uni_player_2/presentation/homepage/widgets/appbar.dart';
 import 'package:uni_player_2/presentation/homepage/widgets/artwork_image.dart';
@@ -14,8 +17,10 @@ import 'package:uni_player_2/presentation/homepage/widgets/duration_bar.dart';
 import 'package:uni_player_2/presentation/songlist_page/songlist_screen.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
 
+  final player = locator.get<Instances>().audioplayer;
+  final songlist = locator.get<SongListServiceImp>().songlist;
   @override
   Widget build(BuildContext context) {
     return artWorkContainer(
@@ -68,21 +73,37 @@ class HomePage extends StatelessWidget {
                                   },
                                 ),
 
-                                BlocBuilder<HomepageBloc, HomepageState>(
-                                  builder: (context, state) {
-                                    return CustomContainer(
-                                      color: Colors.transparent,
-                                      child: CustomText(
-                                        paddingleft: 10,
-                                        string: state.currentsongtitle ?? '',
-                                        color: Colors.white,
-                                        fonttype: FontType.aboretofont,
-                                        texttype: TextType.titleMedium,
-                                        fontweight: FontWeight.bold,
-                                      ),
-                                    );
-                                  },
-                                ),
+                                StreamBuilder<int?>(
+                                    stream: player.currentIndexStream,
+                                    builder: (context, state) {
+                                      if (state.data == null ||
+                                          state.hasError) {
+                                        return const CustomContainer(
+                                          color: Colors.transparent,
+                                          child: CustomText(
+                                            paddingleft: 10,
+                                            string: 'Play Song',
+                                            color: Colors.white,
+                                            fonttype: FontType.aboretofont,
+                                            texttype: TextType.titleMedium,
+                                            fontweight: FontWeight.bold,
+                                          ),
+                                        );
+                                      } else {
+                                        return CustomContainer(
+                                          color: Colors.transparent,
+                                          child: CustomText(
+                                            paddingleft: 10,
+                                            string: songlist[state.data!]
+                                                .displayNameWOExt,
+                                            color: Colors.white,
+                                            fonttype: FontType.aboretofont,
+                                            texttype: TextType.titleMedium,
+                                            fontweight: FontWeight.bold,
+                                          ),
+                                        );
+                                      }
+                                    }),
 
                                 //DURATION CONTAINER;
                                 DurationBar()

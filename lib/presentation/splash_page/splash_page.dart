@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // context.read<HomepageBloc>().add(GenerateAudioListEvent());
     Timer(const Duration(milliseconds: 1000), () {
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (ctx) => const HomePage()));
+          .push(MaterialPageRoute(builder: (ctx) => HomePage()));
     });
     super.initState();
   }

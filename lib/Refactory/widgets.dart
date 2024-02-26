@@ -281,38 +281,37 @@ Widget artWorkContainer(
     bool? isnullwidgetMusicnote = false,
     StreamNullWidget? isStreamNullWidget = StreamNullWidget.musicnote}) {
   final player = locator.get<Instances>().audioplayer;
-  final list = locator.get<SongListServiceImp>().modelList;
+  final songlist = locator.get<SongListServiceImp>().songlist;
+
   return SizedBox(
     child: Stack(fit: StackFit.expand, children: [
       StreamBuilder<int?>(
-        stream: player.currentIndexStream,
-        builder: (context, state) {
-          log('stream builer called');
-          if (state.data == null || state.hasError) {
-            if (isStreamNullWidget == StreamNullWidget.musicnote) {
-              return CircleAvatar(
-                backgroundColor: Colors.transparent,
-                child: iconWidget(
-                    icon: Icons.music_note_rounded,
-                    color: ConstColor.backgroundcolor,
-                    size: 100),
-              );
+          stream: player.currentIndexStream,
+          builder: (context, state) {
+            if (state.data == null || state.hasError) {
+              if (isStreamNullWidget == StreamNullWidget.musicnote) {
+                return CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: iconWidget(
+                      icon: Icons.music_note_rounded,
+                      color: ConstColor.backgroundcolor,
+                      size: 100),
+                );
+              } else {
+                return Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: ConstColor.backgroundcolor,
+                );
+              }
             } else {
-              return Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: ConstColor.backgroundcolor,
-              );
+              return onlyqueryArtwork(
+                  artworkId: songlist[state.data!].id,
+                  isNullwidgetMusicNote: isnullwidgetMusicnote,
+                  musicnotcolor: ConstColor.backgroundcolor,
+                  musicnotesize: 100);
             }
-          }
-
-          return onlyqueryArtwork(
-              artworkId: list[state.data!].id,
-              isNullwidgetMusicNote: isnullwidgetMusicnote,
-              musicnotcolor: ConstColor.backgroundcolor,
-              musicnotesize: 100);
-        },
-      ),
+          }),
       Center(
         child: child,
       )
@@ -358,59 +357,4 @@ Widget onlyqueryArtwork(
       );
     },
   );
-}
-
-class IndexStreamWidget extends StatelessWidget {
-  final Widget? child;
-  bool isnullwidgetMusicnote;
-  StreamNullWidget isStreamNullWidget;
-
-  IndexStreamWidget(
-      {super.key,
-      this.child,
-      this.isStreamNullWidget = StreamNullWidget.musicnote,
-      this.isnullwidgetMusicnote = false});
-
-  final player = locator.get<Instances>().audioplayer;
-  final list = locator.get<SongListServiceImp>().modelList;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      child: Stack(fit: StackFit.expand, children: [
-        StreamBuilder<int?>(
-          stream: player.currentIndexStream,
-          builder: (context, state) {
-            log('stream builer called');
-            if (state.data == null || state.hasError) {
-              if (isStreamNullWidget == StreamNullWidget.musicnote) {
-                return CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: iconWidget(
-                      icon: Icons.music_note_rounded,
-                      color: ConstColor.backgroundcolor,
-                      size: 100),
-                );
-              } else {
-                return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: ConstColor.backgroundcolor,
-                );
-              }
-            }
-
-            return onlyqueryArtwork(
-                artworkId: list[state.data!].id,
-                isNullwidgetMusicNote: isnullwidgetMusicnote,
-                musicnotcolor: ConstColor.backgroundcolor,
-                musicnotesize: 100);
-          },
-        ),
-        Center(
-          child: child,
-        )
-      ]),
-    );
-  }
 }
