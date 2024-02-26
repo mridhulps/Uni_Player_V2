@@ -6,23 +6,12 @@ import 'package:uni_player_2/app_Global_const/const.dart';
 import 'package:uni_player_2/global/Entity/positionStream.dart';
 import 'package:uni_player_2/global/Locator/locator.dart';
 import 'package:uni_player_2/global/domain/instances/instance.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:uni_player_2/global/domain/streams/streams.dart';
 
 class DurationBar extends StatelessWidget {
   DurationBar({super.key});
 
   final player = locator.get<Instances>().audioplayer;
-
-  Stream<PositionDataStream> get positionDataStream {
-    return Rx.combineLatest3<Duration?, Duration?, int?, PositionDataStream>(
-        player.positionStream,
-        player.durationStream,
-        player.currentIndexStream,
-        (pos, dura, ind) => PositionDataStream(
-            positionsstream: pos ?? Duration.zero,
-            durationstream: dura ?? Duration.zero,
-            currentindexstream: Duration(seconds: ind ?? 0.toInt())));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,23 +27,29 @@ class DurationBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                StreamBuilder<Duration>(
-                    stream: player.positionStream,
+                StreamBuilder<PositionDataStream>(
+                    stream: positionDataStream,
                     builder: (context, state) {
                       return CustomText(
                           string: state.data == null || state.hasError
                               ? '0.00'
-                              : state.data!.toString().split('.').first,
+                              : state.data!.positionsstream
+                                  .toString()
+                                  .split('.')
+                                  .first,
                           paddingleft: 20,
                           fontweight: FontWeight.bold);
                     }),
-                StreamBuilder<Duration?>(
-                    stream: player.durationStream,
+                StreamBuilder<PositionDataStream?>(
+                    stream: positionDataStream,
                     builder: (context, state) {
                       return CustomText(
                           string: state.data == null || state.hasError
                               ? '0.00'
-                              : state.data!.toString().split('.').first,
+                              : state.data!.durationstream
+                                  .toString()
+                                  .split('.')
+                                  .first,
                           paddingright: 20,
                           fontweight: FontWeight.bold);
                     }),
@@ -65,11 +60,12 @@ class DurationBar extends StatelessWidget {
           StreamBuilder<PositionDataStream>(
               stream: positionDataStream,
               builder: (context, state) {
-                final data = state.data ??
-                    PositionDataStream(
+                final data = (state.data == null || state.hasError)
+                    ? PositionDataStream(
                         positionsstream: Duration.zero,
                         durationstream: Duration.zero,
-                        currentindexstream: Duration.zero);
+                      )
+                    : state.data!;
 
                 return Slider(
                     value: data.positionsstream.inSeconds.toDouble(),

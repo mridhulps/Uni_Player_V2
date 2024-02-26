@@ -8,9 +8,11 @@ import 'package:uni_player_2/Refactory/funtions.dart';
 
 import 'package:uni_player_2/app_Global_const/const.dart';
 import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
+import 'package:uni_player_2/global/Entity/positionStream.dart';
 import 'package:uni_player_2/global/Locator/locator.dart';
 import 'package:uni_player_2/global/Usecase/songlist_serviceImp.dart';
 import 'package:uni_player_2/global/domain/instances/instance.dart';
+import 'package:uni_player_2/global/domain/streams/streams.dart';
 
 class CustomContainer extends StatelessWidget {
   final double? width;
@@ -285,9 +287,8 @@ Widget artWorkContainer(
       StreamBuilder<int?>(
         stream: player.currentIndexStream,
         builder: (context, state) {
+          log('stream builer called');
           if (state.data == null || state.hasError) {
-            log('artwork is null form stream builder');
-
             if (isStreamNullWidget == StreamNullWidget.musicnote) {
               return CircleAvatar(
                 backgroundColor: Colors.transparent,
@@ -306,7 +307,7 @@ Widget artWorkContainer(
           }
 
           return onlyqueryArtwork(
-              artworkId: list[state.data ?? 0].id,
+              artworkId: list[state.data!].id,
               isNullwidgetMusicNote: isnullwidgetMusicnote,
               musicnotcolor: ConstColor.backgroundcolor,
               musicnotesize: 100);
@@ -357,4 +358,59 @@ Widget onlyqueryArtwork(
       );
     },
   );
+}
+
+class IndexStreamWidget extends StatelessWidget {
+  final Widget? child;
+  bool isnullwidgetMusicnote;
+  StreamNullWidget isStreamNullWidget;
+
+  IndexStreamWidget(
+      {super.key,
+      this.child,
+      this.isStreamNullWidget = StreamNullWidget.musicnote,
+      this.isnullwidgetMusicnote = false});
+
+  final player = locator.get<Instances>().audioplayer;
+  final list = locator.get<SongListServiceImp>().modelList;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: Stack(fit: StackFit.expand, children: [
+        StreamBuilder<int?>(
+          stream: player.currentIndexStream,
+          builder: (context, state) {
+            log('stream builer called');
+            if (state.data == null || state.hasError) {
+              if (isStreamNullWidget == StreamNullWidget.musicnote) {
+                return CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: iconWidget(
+                      icon: Icons.music_note_rounded,
+                      color: ConstColor.backgroundcolor,
+                      size: 100),
+                );
+              } else {
+                return Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: ConstColor.backgroundcolor,
+                );
+              }
+            }
+
+            return onlyqueryArtwork(
+                artworkId: list[state.data!].id,
+                isNullwidgetMusicNote: isnullwidgetMusicnote,
+                musicnotcolor: ConstColor.backgroundcolor,
+                musicnotesize: 100);
+          },
+        ),
+        Center(
+          child: child,
+        )
+      ]),
+    );
+  }
 }

@@ -3,10 +3,9 @@
 class PositionDataStream {
   final Duration positionsstream;
   final Duration durationstream;
-  final Duration currentindexstream;
 
-  PositionDataStream(
-      {required this.positionsstream,
-      required this.durationstream,
-      required this.currentindexstream});
+  PositionDataStream({
+    required this.positionsstream,
+    required this.durationstream,
+  });
 }
