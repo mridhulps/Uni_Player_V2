@@ -9,3 +9,10 @@ class PositionDataStream {
     required this.durationstream,
   });
 }
+
+class CurrentIndexDataStream {
+  final int artwork;
+  final String title;
+
+  CurrentIndexDataStream({required this.artwork, required this.title});
+}

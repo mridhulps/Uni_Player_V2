@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+
 import 'package:uni_player_2/core/permission_acess.dart';
 
 import 'package:uni_player_2/global/Locator/locator.dart';
@@ -27,13 +28,8 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
 
     on<BackwardEvent>((event, emit) => backWard(event, emit, audioplayer));
 
-    on<GenerateAudioListEvent>((event, emit) => generatemusicList(
-          event,
-          emit,
-          audioplayer,
-        ));
-
-    // on<IndexStreamEvent>((event, emit) => indexStream(audioplayer, emit));
+    // on<IndexStreamEvent>(
+    //     (event, emit) => indexstream(event, emit, audioplayer));
   }
 
   getSongList(GetSonglistEvnet event, Emitter<HomepageState> emit) async {
@@ -98,15 +94,5 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     if (player.hasPrevious) {
       player.seekToPrevious();
     }
-  }
-
-  generatemusicList(GenerateAudioListEvent event, Emitter<HomepageState> emit,
-      AudioPlayer player) {
-    locator.get<SongListServiceImp>().getSongList();
-
-    final list =
-        state.songList.map((e) => AudioSource.uri(Uri.parse(e.uri!))).toList();
-
-    state.copyWith(audiosource: ConcatenatingAudioSource(children: list));
   }
 }

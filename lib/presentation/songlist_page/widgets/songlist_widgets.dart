@@ -24,7 +24,7 @@ class SongLIstWidget extends StatelessWidget {
               radius: 20,
               child: onlyqueryArtwork(
                   artworkId: song.id,
-                  isNullwidgetMusicNote: true,
+                  nullwiget: StreamNullWidget.musicnote,
                   musicnotesize: 25),
             ),
             title: CustomText(

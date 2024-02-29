@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uni_player_2/app_Global_const/theme_const.dart';
 import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
-
+import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
 import 'package:uni_player_2/global/Locator/locator.dart';
 
-import 'package:uni_player_2/presentation/splash_page/splash_page.dart';
+import 'package:uni_player_2/presentation/homepage/homepage.dart';
 
 void main(List<String> args) {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,11 +26,11 @@ class NewApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: ((context) => HomepageBloc())),
-      ],
+       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppTheme.theme(),
-        home: const SplashScreen(),
+        home: HomePage(),
       ),
     );
   }
