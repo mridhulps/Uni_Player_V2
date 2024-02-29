@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:permission_handler/permission_handler.dart';
+import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
 import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
 
 class BetterPermission {
@@ -11,16 +12,16 @@ class BetterPermission {
     if (await permissionstat.isGranted) {
       print('granded');
 
-      BlocProvider.of<SongListBloc>(context).add(GetSonglist());
+      //BlocProvider.of<HomepageBloc>(context).add(GetSonglist());
     } else if (await permissionstat.isDenied) {
       print('denied');
 
       final stat = await permissionstat.request();
 
       if (stat.isGranted) {
-        BlocProvider.of<SongListBloc>(context).add(GetSonglist());
+        // BlocProvider.of<HomepageBloc>(context).add(GetSonglist());
       } else {
-        BlocProvider.of<SongListBloc>(context).add(DeniedPermission());
+        // BlocProvider.of<HomepageBloc>(context).add(DeniedPermission());
       }
     } else {
       print('permanent denied');
@@ -28,9 +29,9 @@ class BetterPermission {
       final istrue = await openAppSettings();
 
       if (istrue == true) {
-        BlocProvider.of<SongListBloc>(context).add(GetSonglist());
+        //BlocProvider.of<HomepageBloc>(context).add(GetSonglist());
       } else {
-        BlocProvider.of<SongListBloc>(context).add(PermenentDeniedPermission());
+        //BlocProvider.of<HomepageBloc>(context).add(PermenentDeniedPermission());
       }
     }
   }

@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
 
+import 'package:uni_player_2/global/Entity/positionStream.dart';
+import 'package:uni_player_2/global/Locator/locator.dart';
+import 'package:uni_player_2/global/domain/instances/instance.dart';
+import 'package:uni_player_2/global/domain/streams/streams.dart';
+
 class DurationBar extends StatelessWidget {
-  const DurationBar({super.key});
+  DurationBar({super.key});
+
+  final player = locator.get<Instances>().audioplayer;
 
   @override
   Widget build(BuildContext context) {
@@ -12,34 +20,64 @@ class DurationBar extends StatelessWidget {
       child: Column(
         children: [
           //DURATION TIME;
-          const Padding(
-            padding: EdgeInsets.only(
+          Padding(
+            padding: const EdgeInsets.only(
               top: 10,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CustomText(
-                    string: '0.00',
-                    paddingleft: 20,
-                    fontweight: FontWeight.bold),
-                CustomText(
-                    string: '2.24',
-                    paddingright: 20,
-                    fontweight: FontWeight.bold)
+                StreamBuilder<PositionDataStream>(
+                    stream: positionDataStream,
+                    builder: (context, state) {
+                      return CustomText(
+                          string: state.data == null || state.hasError
+                              ? '0.00'
+                              : state.data!.positionsstream
+                                  .toString()
+                                  .split('.')
+                                  .first,
+                          paddingleft: 20,
+                          fontweight: FontWeight.bold);
+                    }),
+                StreamBuilder<PositionDataStream?>(
+                    stream: positionDataStream,
+                    builder: (context, state) {
+                      return CustomText(
+                          string: state.data == null || state.hasError
+                              ? '0.00'
+                              : state.data!.durationstream
+                                  .toString()
+                                  .split('.')
+                                  .first,
+                          paddingright: 20,
+                          fontweight: FontWeight.bold);
+                    }),
               ],
             ),
           ),
           //DURATION BAR;
-          Slider(
-              value: 5,
-              min: 0.0,
-              max: 10,
-              inactiveColor: Colors.transparent,
-              activeColor: ConstColor.buttoncolor,
-              thumbColor: ConstColor.buttoncolor,
-              overlayColor: const MaterialStatePropertyAll(Colors.amber),
-              onChanged: (value) {}),
+          StreamBuilder<PositionDataStream>(
+              stream: positionDataStream,
+              builder: (context, state) {
+                final data = (state.data == null || state.hasError)
+                    ? PositionDataStream(
+                        positionsstream: Duration.zero,
+                        durationstream: Duration.zero,
+                      )
+                    : state.data!;
+
+                return Slider(
+                    value: data.positionsstream.inSeconds.toDouble(),
+                    min: 0.0,
+                    max: data.durationstream.inSeconds.toDouble(),
+                    inactiveColor: Colors.transparent,
+                    activeColor: ConstColor.buttoncolor,
+                    thumbColor: ConstColor.buttoncolor,
+                    onChanged: (value) {
+                      player.seek(Duration(seconds: value.toInt()));
+                    });
+              }),
 
           Padding(
             padding: const EdgeInsets.only(bottom: 10, top: 10),

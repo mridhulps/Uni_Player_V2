@@ -1,14 +1,16 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:uni_player_2/Refactory/funtions.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
-import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
+import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
+
 import 'package:uni_player_2/presentation/songlist_page/widgets/build_state.dart';
 
 class MusicListScreen extends StatelessWidget {
@@ -16,12 +18,12 @@ class MusicListScreen extends StatelessWidget {
     super.key,
   });
 
-  final String imageurl = 'https://wallpapercave.com/wp/wp5121792.jpg';
-
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<SongListBloc>().add(GetSonglist());
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      context.read<HomepageBloc>().add(GetSonglistEvnet());
+
+      Timer(const Duration(milliseconds: 100), () {});
     });
     return imageContainer(
       child: Scaffold(
@@ -37,13 +39,15 @@ class MusicListScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     AppBar(
+                      automaticallyImplyLeading: false,
                       backgroundColor: Colors.transparent,
-                      title: Text(
-                        'Songs',
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: ConstColor.whitecolor,
-                            fontFamily: GoogleFonts.aboreto().fontFamily,
-                            fontWeight: FontWeight.bold),
+                      title: const CustomText(
+                        string: 'Songs',
+                        texttype: TextType.titleLarge,
+                        fonttype: FontType.aboretofont,
+                        color: Colors.white,
+                        fontsize: 23,
+                        fontweight: FontWeight.bold,
                       ),
                       actions: [
                         iconWidget(icon: Icons.sort_rounded, paddingright: 15)

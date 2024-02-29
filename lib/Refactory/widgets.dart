@@ -1,12 +1,15 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:uni_player_2/app_Global_const/const.dart';
-import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
+
+import 'package:uni_player_2/global/Locator/locator.dart';
+import 'package:uni_player_2/global/Usecase/songlist_serviceImp.dart';
+import 'package:uni_player_2/global/domain/instances/instance.dart';
 
 class CustomContainer extends StatelessWidget {
   final double? width;
@@ -18,19 +21,20 @@ class CustomContainer extends StatelessWidget {
   final Color bordercolor;
   final double borderwidth;
   final Widget? child;
+  final bool? constraintrue;
 
-  const CustomContainer({
-    super.key,
-    this.width,
-    this.height,
-    this.radius,
-    this.borderEnable = false,
-    this.bordercolor = Colors.white,
-    this.borderwidth = 0,
-    this.color,
-    this.onpress,
-    this.child,
-  });
+  const CustomContainer(
+      {super.key,
+      this.width,
+      this.height,
+      this.radius,
+      this.borderEnable = false,
+      this.bordercolor = Colors.white,
+      this.borderwidth = 0,
+      this.color,
+      this.onpress,
+      this.child,
+      this.constraintrue = false});
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +45,11 @@ class CustomContainer extends StatelessWidget {
       child: Container(
         width: width,
         height: height,
+        constraints: constraintrue == false
+            ? null
+            : const BoxConstraints(
+                maxHeight: 80,
+              ),
         decoration: BoxDecoration(
             color: color ?? Colors.white,
             borderRadius: BorderRadius.circular(radius ?? 10),
@@ -178,10 +187,10 @@ class CustomText extends StatelessWidget {
                         : (texttype == TextType.titleSmall)
                             ? buildCopywith(text.bodySmall)
                             : (texttype == TextType.subtitleLarge)
-                                ? buildCopywith(text.titleLarge)
-                                : (texttype == TextType.titleMedium)
-                                    ? buildCopywith(text.titleMedium)
-                                    : buildCopywith(text.titleSmall)));
+                                ? buildCopywith(text.labelLarge)
+                                : (texttype == TextType.subtitleMedium)
+                                    ? buildCopywith(text.labelMedium)
+                                    : buildCopywith(text.labelSmall)));
   }
 
   TextStyle buildCopywith(TextStyle? style) {
@@ -237,38 +246,124 @@ Widget iconWidget({
 //USE FOR ALL ELAVATION BUTTONS;
 Widget materialButton({
   required Widget child,
+  double? radius,
+  Color? buttoncolor = Colors.white,
 }) {
   return Material(
     elevation: 3,
     borderOnForeground: false,
     type: MaterialType.circle,
     color: Colors.white,
-    child: child,
+    child: CircleAvatar(
+        backgroundColor: buttoncolor, radius: radius, child: child),
   );
 }
 
-Widget artWorkContainer({Widget? child}) {
-  return SizedBox(
-    child: Stack(fit: StackFit.expand, children: [
-      BlocBuilder<HomepageBloc, ArtworkState>(
+//USING FOR MULTIPLE TIME ;
+
+mixin IndexstreamInstances {
+  final player = locator.get<Instances>().audioplayer;
+  final list = locator.get<SongListServiceImp>().songlist;
+}
+
+//TEXT STREAM CONTAINER;
+
+class TextStreamwidget extends StatelessWidget with IndexstreamInstances {
+  final StreamText streamtext;
+  TextStreamwidget({
+    super.key,
+    this.streamtext = StreamText.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<int?>(
+        stream: player.currentIndexStream,
         builder: (context, state) {
-          log('artwoek bloc builded');
-          return onlyqueryArtwork(artworkId: state.artworkId);
-        },
-      ),
+          if (state.data == null || state.hasError) {
+            return CustomText(
+              string: streamtext == StreamText.title ? 'Play Song' : 'Unknown',
+              color: Colors.white,
+              fonttype: FontType.aboretofont,
+              texttype: TextType.titleMedium,
+              fontweight: FontWeight.bold,
+            );
+          } else {
+            final title = list[state.data!].displayNameWOExt;
+            final artist = list[state.data!].artist;
+            return CustomText(
+              string: streamtext == StreamText.title ? title : artist!,
+              color: Colors.white,
+              fonttype: FontType.aboretofont,
+              texttype: TextType.titleMedium,
+              fontweight: FontWeight.bold,
+            );
+          }
+        });
+  }
+}
+
+enum StreamText { title, artist }
+
+//ARTWORK STREAM CONTAINER;
+
+// ignore: must_be_immutable
+class ArtworkStreamWidget extends StatelessWidget with IndexstreamInstances {
+  Widget? child;
+
+  StreamNullWidget? nullwiget;
+
+  ArtworkStreamWidget(
+      {super.key, this.child, this.nullwiget = StreamNullWidget.musicnote});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(fit: StackFit.expand, children: [
+      StreamBuilder<int?>(
+          stream: player.currentIndexStream,
+          builder: (context, state) {
+            //   log(state.data.toString());
+            if (state.data == null || state.hasError) {
+              if (nullwiget == StreamNullWidget.musicnote) {
+                return CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: iconWidget(
+                      icon: Icons.music_note_rounded,
+                      color: ConstColor.backgroundcolor,
+                      size: 100),
+                );
+              } else {
+                return Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: ConstColor.backgroundcolor,
+                );
+              }
+            } else {
+              final id = list[state.data!].id;
+              return onlyqueryArtwork(
+                  artworkId: id,
+                  nullwiget: nullwiget,
+                  musicnotcolor: ConstColor.backgroundcolor,
+                  musicnotesize: 100);
+            }
+          }),
       Center(
         child: child,
       )
-    ]),
-  );
+    ]);
+  }
 }
+
+enum StreamNullWidget { plain, musicnote }
 
 //QUERYARTWORKIDGET;
 
 Widget onlyqueryArtwork(
     {required int artworkId,
-    bool? isNullwidgetMusicNote = false,
-    double? musicnotesize = 0.0}) {
+    StreamNullWidget? nullwiget,
+    double? musicnotesize = 0.0,
+    Color? musicnotcolor}) {
   return QueryArtworkWidget(
     id: artworkId,
     type: ArtworkType.AUDIO,
@@ -276,11 +371,17 @@ Widget onlyqueryArtwork(
     artworkFit: BoxFit.fill,
     quality: 100,
     artworkBorder: BorderRadius.circular(20),
-    nullArtworkWidget: isNullwidgetMusicNote == false
+    nullArtworkWidget: nullwiget == StreamNullWidget.plain
         ? Container(
             color: ConstColor.backgroundcolor,
           )
-        : iconWidget(icon: Icons.music_note, size: musicnotesize),
+        : CircleAvatar(
+            backgroundColor: Colors.transparent,
+            child: iconWidget(
+                icon: Icons.music_note_rounded,
+                color: musicnotcolor ?? Colors.white,
+                size: musicnotesize),
+          ),
     errorBuilder: (p0, p1, p2) {
       log('artworkErrorbuilder called, object(${p1.toString()}),stacktrace(${p2.toString()})');
       return CircleAvatar(
