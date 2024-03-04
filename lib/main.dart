@@ -26,11 +26,12 @@ class NewApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: ((context) => HomepageBloc())),
-       ],
+        BlocProvider(create: ((context) => SongListBloc())),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppTheme.theme(),
-        home: HomePage(),
+        home: const HomePage(),
       ),
     );
   }

@@ -6,30 +6,34 @@ class HomepageState {
   final bool isLoading;
   final bool isplaying;
   final bool isFailure;
-  final bool isnext;
+
   final int artworkId;
   final String? currentsongtitle;
   final String? currentsongartist;
-  final List<SongModel> songList;
   final ConcatenatingAudioSource? audiosourceList;
+  final List<SongModel> songList;
+  final List<CustomSongModel> modelList;
+  final int currentIndex;
 
   HomepageState({
     required this.permissionstat,
     required this.alreadyLoaded,
     required this.isplaying,
-    required this.isnext,
+    //required this.isnext,
     required this.artworkId,
     this.currentsongartist,
     this.currentsongtitle,
     required this.isLoading,
     required this.isFailure,
     required this.songList,
+    this.modelList = const [],
     this.audiosourceList,
+    this.currentIndex = 0,
   });
 
   HomepageState copyWith(
       {bool? isplaying,
-      bool? isnext,
+      int? currentindex,
       bool? alreadyLoaded,
       PermissionType? permissiontype,
       int? artworkId,
@@ -38,18 +42,20 @@ class HomepageState {
       bool? isloadings,
       bool? isFailures,
       List<SongModel>? songlist,
+      List<CustomSongModel>? modellist,
       ConcatenatingAudioSource? audiosource}) {
     return HomepageState(
         alreadyLoaded: alreadyLoaded ?? this.alreadyLoaded,
+        currentIndex: currentindex ?? currentIndex,
         permissionstat: permissiontype ?? permissionstat,
         isplaying: isplaying ?? this.isplaying,
-        isnext: isnext ?? this.isnext,
         artworkId: artworkId ?? this.artworkId,
         currentsongtitle: songtitle ?? currentsongtitle,
         currentsongartist: songartist ?? currentsongartist,
         isFailure: isFailures ?? isFailure,
         isLoading: isloadings ?? isLoading,
         songList: songlist ?? songList,
+        modelList: modellist ?? modelList,
         audiosourceList: audiosource ?? audiosourceList);
   }
 }
@@ -59,7 +65,6 @@ final class HomepageInitial extends HomepageState {
     super.permissionstat = PermissionType.initial,
     super.alreadyLoaded = false,
     super.isplaying = false,
-    super.isnext = false,
     super.artworkId = 0,
     super.currentsongtitle = 'Play Song',
     super.currentsongartist = '',

@@ -5,9 +5,10 @@ import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:uni_player_2/core/permission_acess.dart';
+import 'package:uni_player_2/global/Entity/songInfo_model.dart';
 
 import 'package:uni_player_2/global/Locator/locator.dart';
-import 'package:uni_player_2/global/Usecase/songlist_serviceImp.dart';
+
 import 'package:uni_player_2/global/domain/instances/instance.dart';
 
 part 'homepage_event.dart';
@@ -17,7 +18,8 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
   HomepageBloc() : super(HomepageInitial()) {
     final audioplayer = locator.get<Instances>().audioplayer;
 
-    on<GetSonglistEvnet>((event, emit) => getSongList(event, emit));
+    on<GenerateAudioSourceEvent>(
+        (event, emit) => generateAudiosource(event, emit));
 
     on<PlaySongEvent>((event, emit) => playSong(event, emit, audioplayer));
 
@@ -27,32 +29,37 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     on<ForwardEvent>((event, emit) => forWard(event, emit, audioplayer));
 
     on<BackwardEvent>((event, emit) => backWard(event, emit, audioplayer));
-
-    // on<IndexStreamEvent>(
-    //     (event, emit) => indexstream(event, emit, audioplayer));
   }
 
-  getSongList(GetSonglistEvnet event, Emitter<HomepageState> emit) async {
-    emit(state.copyWith(
-        isloadings: true, permissiontype: PermissionType.granded));
+  generateAudiosource(
+      GenerateAudioSourceEvent event, Emitter<HomepageState> emit) async {
+    List<UriAudioSource> audiosourcelist = [];
 
-    final songlist = await locator.get<SongListServiceImp>().getSongList();
+    try {
+      for (var song in event.songlist) {
+        final list = AudioSource.uri(Uri.parse(song.uri!));
 
-    songlist.fold((error) {
-      return emit(
-          state.copyWith(isFailures: true, isloadings: false, songlist: []));
-    }, (list) {
-      final audiolist =
-          list.map((e) => AudioSource.uri(Uri.parse(e.uri!))).toList();
+        audiosourcelist.add(list);
+      }
+
+      final customsongmodellist = event.songlist
+          .map((e) => CustomSongModel(
+              songuri: e.uri,
+              title: e.displayNameWOExt,
+              artist: e.artist ?? '<Unknown>',
+              artworkid: e.id,
+              isfavorite: false))
+          .toList();
 
       return emit(state.copyWith(
-        isFailures: false,
-        isloadings: false,
-        alreadyLoaded: true,
-        songlist: list,
-        audiosource: ConcatenatingAudioSource(children: audiolist),
-      ));
-    });
+          modellist: customsongmodellist,
+          audiosource: ConcatenatingAudioSource(children: audiosourcelist)));
+    } catch (e) {
+      log('generateaudiosource error catched - ${e.toString()}');
+      return emit(state.copyWith(
+          songlist: event.songlist,
+          audiosource: ConcatenatingAudioSource(children: [])));
+    }
   }
 
   playSong(PlaySongEvent event, Emitter<HomepageState> emit,
@@ -68,7 +75,7 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     } catch (e) {
       log('Error catched ${e.toString()}');
 
-      emit(state.copyWith(isplaying: false, isFailures: true));
+      return emit(state.copyWith(isplaying: false, isFailures: true));
     }
   }
 

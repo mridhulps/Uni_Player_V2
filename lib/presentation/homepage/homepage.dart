@@ -46,7 +46,6 @@ class HomePage extends StatelessWidget {
                     Expanded(
                         flex: 6,
                         child: Container(
-                            // color: Colors.lightBlue,
                             padding: const EdgeInsets.only(
                                 left: 5, right: 5, top: 5, bottom: 20),
                             child: Column(
@@ -54,8 +53,14 @@ class HomePage extends StatelessWidget {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 // ARTWORK CONTAINER ;
-                                const ArtWorkWidget(),
-                                //SPACER;
+
+                                ArtworkBox(
+                                  child: ArtworkStreamWidget(
+                                    nullwiget: StreamNullWidget.musicnote,
+                                  ),
+                                ),
+
+                                //TITLE AND ARTIST WITH INDEXSTREAWM;
 
                                 CustomContainer(
                                     color: Colors.transparent,
@@ -67,9 +72,13 @@ class HomePage extends StatelessWidget {
                                         children: [
                                           TextStreamwidget(
                                             streamtext: StreamText.title,
+                                            texttype: TextType.titleMedium,
+                                            paddingbottom: 10,
                                           ),
                                           TextStreamwidget(
                                             streamtext: StreamText.artist,
+                                            texttype: TextType.subtitleMedium,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ],
                                       ),

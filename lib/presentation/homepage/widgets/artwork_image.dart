@@ -5,10 +5,9 @@ import 'package:uni_player_2/Refactory/widgets.dart';
 
 import 'package:uni_player_2/app_Global_const/const.dart';
 
-class ArtWorkWidget extends StatelessWidget {
-  const ArtWorkWidget({
-    super.key,
-  });
+class ArtworkBox extends StatelessWidget {
+  final Widget child;
+  const ArtworkBox({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +24,14 @@ class ArtWorkWidget extends StatelessWidget {
             borderEnable: true,
             borderwidth: 0,
             child: Container(
-              width: screnRatio(context: context).width,
-              height: screnRatio(context: context).width / 1.3,
-              padding: const EdgeInsets.all(2),
-              child: ArtworkStreamWidget(
-                nullwiget: StreamNullWidget.musicnote,
-              ),
-            ),
+                width: screnRatio(context: context).width,
+                height: screnRatio(context: context).width / 1.3,
+                padding: const EdgeInsets.all(2),
+                child: child),
           ),
 
           ConstSize.height25,
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

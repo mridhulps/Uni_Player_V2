@@ -37,7 +37,6 @@ class ControllSystem extends StatelessWidget {
               ),
             ),
           ),
-
           StreamBuilder<PlayerState>(
             stream: player.playerStateStream,
             builder: (context, state) {
@@ -74,26 +73,6 @@ class ControllSystem extends StatelessWidget {
               }
             },
           ),
-
-          // InkWell(onTap: () {
-          //   context.read<HomepageBloc>().add(PlayAndPauseEvent());
-          // }, child: BlocBuilder<HomepageBloc, HomepageState>(
-          //   builder: (context, state) {
-          //     return materialButton(
-          //         radius: 30,
-          //         child: state.isplaying == true
-          //             ? iconWidget(
-          //                 icon: Icons.pause_outlined,
-          //                 color: ConstColor.buttoncolor,
-          //                 size: 40,
-          //               )
-          //             : iconWidget(
-          //                 icon: Icons.play_arrow_rounded,
-          //                 color: ConstColor.buttoncolor,
-          //                 size: 45,
-          //               ));
-          //   },
-          // )),
           InkWell(
             onTap: () {
               context.read<HomepageBloc>().add(ForwardEvent());

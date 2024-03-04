@@ -1,17 +1,14 @@
-import 'dart:async';
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:uni_player_2/Refactory/funtions.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
-import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
 
 import 'package:uni_player_2/presentation/songlist_page/widgets/build_state.dart';
+import 'package:uni_player_2/presentation/songlist_page/widgets/sorting_button.dart';
 
 class MusicListScreen extends StatelessWidget {
   const MusicListScreen({
@@ -20,11 +17,6 @@ class MusicListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      context.read<HomepageBloc>().add(GetSonglistEvnet());
-
-      Timer(const Duration(milliseconds: 100), () {});
-    });
     return imageContainer(
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -49,9 +41,7 @@ class MusicListScreen extends StatelessWidget {
                         fontsize: 23,
                         fontweight: FontWeight.bold,
                       ),
-                      actions: [
-                        iconWidget(icon: Icons.sort_rounded, paddingright: 15)
-                      ],
+                      actions: const [SortingDropdown()],
                     ),
 
                     //TEXTFIELD CONTAINER;

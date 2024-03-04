@@ -11,6 +11,8 @@ import 'package:uni_player_2/global/Locator/locator.dart';
 import 'package:uni_player_2/global/Usecase/songlist_serviceImp.dart';
 import 'package:uni_player_2/global/domain/instances/instance.dart';
 
+import '../application/HomePagebloc/homepage_bloc.dart';
+
 class CustomContainer extends StatelessWidget {
   final double? width;
   final double? height;
@@ -270,10 +272,17 @@ mixin IndexstreamInstances {
 
 class TextStreamwidget extends StatelessWidget with IndexstreamInstances {
   final StreamText streamtext;
-  TextStreamwidget({
-    super.key,
-    this.streamtext = StreamText.title,
-  });
+  final TextType texttype;
+  final double paddingtop;
+  final double paddingbottom;
+  final TextOverflow? overflow;
+  TextStreamwidget(
+      {super.key,
+      this.streamtext = StreamText.title,
+      this.texttype = TextType.deFault,
+      this.paddingtop = 0.0,
+      this.paddingbottom = 0.0,
+      this.overflow});
 
   @override
   Widget build(BuildContext context) {
@@ -282,10 +291,14 @@ class TextStreamwidget extends StatelessWidget with IndexstreamInstances {
         builder: (context, state) {
           if (state.data == null || state.hasError) {
             return CustomText(
-              string: streamtext == StreamText.title ? 'Play Song' : 'Unknown',
+              string:
+                  streamtext == StreamText.title ? 'Play Song' : '<Unknown>',
+              paddingtop: paddingtop,
+              overflow: overflow,
+              paddingbottom: paddingbottom,
               color: Colors.white,
               fonttype: FontType.aboretofont,
-              texttype: TextType.titleMedium,
+              texttype: texttype,
               fontweight: FontWeight.bold,
             );
           } else {
@@ -293,9 +306,12 @@ class TextStreamwidget extends StatelessWidget with IndexstreamInstances {
             final artist = list[state.data!].artist;
             return CustomText(
               string: streamtext == StreamText.title ? title : artist!,
+              paddingtop: paddingtop,
+              overflow: overflow,
+              paddingbottom: paddingbottom,
               color: Colors.white,
               fonttype: FontType.aboretofont,
-              texttype: TextType.titleMedium,
+              texttype: texttype,
               fontweight: FontWeight.bold,
             );
           }
@@ -313,17 +329,23 @@ class ArtworkStreamWidget extends StatelessWidget with IndexstreamInstances {
 
   StreamNullWidget? nullwiget;
 
-  ArtworkStreamWidget(
-      {super.key, this.child, this.nullwiget = StreamNullWidget.musicnote});
+  double? musicnotesize;
+  Color? musicnotcolor;
 
+  ArtworkStreamWidget(
+      {super.key,
+      this.child,
+      this.nullwiget = StreamNullWidget.musicnote,
+      this.musicnotcolor,
+      this.musicnotesize = 0.0});
   @override
   Widget build(BuildContext context) {
     return Stack(fit: StackFit.expand, children: [
       StreamBuilder<int?>(
           stream: player.currentIndexStream,
           builder: (context, state) {
-            //   log(state.data.toString());
             if (state.data == null || state.hasError) {
+              log('data is null artwork');
               if (nullwiget == StreamNullWidget.musicnote) {
                 return CircleAvatar(
                   backgroundColor: Colors.transparent,
@@ -341,6 +363,8 @@ class ArtworkStreamWidget extends StatelessWidget with IndexstreamInstances {
               }
             } else {
               final id = list[state.data!].id;
+
+              log("select artwork id- ${id.toString()}");
               return onlyqueryArtwork(
                   artworkId: id,
                   nullwiget: nullwiget,

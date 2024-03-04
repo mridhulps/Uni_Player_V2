@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
-import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
+
 import 'package:uni_player_2/core/permission_acess.dart';
+import 'package:uni_player_2/global/Entity/songInfo_model.dart';
 
 import 'package:uni_player_2/global/Usecase/songlist_serviceImp.dart';
 
@@ -15,5 +16,5 @@ void getItconfigure() {
 
   locator.registerSingleton<SongListServiceImp>(SongListServiceImp());
 
-  locator.registerSingleton<HomepageBloc>(HomepageBloc());
+  locator.registerSingleton<CurrentState>(CurrentState());
 }

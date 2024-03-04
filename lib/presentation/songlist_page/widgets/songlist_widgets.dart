@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
 import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
@@ -34,20 +35,18 @@ class SongLIstWidget extends StatelessWidget {
                 texttype: TextType.titleMedium,
                 color: ConstColor.whitecolor),
             subtitle: CustomText(
-              string: song.artist ?? '<UnKnown>',
+              string: song.artist ?? '<Unknown>',
               fonttype: FontType.roboto,
-              texttype: TextType.subtitleMedium,
               color: Colors.white54,
             ),
             trailing: iconWidget(icon: Icons.more_vert),
             onTap: () {
-              context.read<HomepageBloc>().add(PlaySongEvent(
-                  currentsonguri: song.uri ?? '', currentIndex: index));
-
-              // context.read<HomepageBloc>().add(GetArtworkEvent(
-              //     artworkId: song.id, title: song.displayNameWOExt));
-
-              // context.read<HomepageBloc>().add(IndexStreamEvent());
+              context
+                  .read<HomepageBloc>()
+                  .add(GenerateAudioSourceEvent(songlist: songlist));
+              context
+                  .read<HomepageBloc>()
+                  .add(PlaySongEvent(currentIndex: index));
             },
           );
         },
