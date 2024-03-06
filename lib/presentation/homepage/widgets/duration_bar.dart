@@ -7,6 +7,7 @@ import 'package:uni_player_2/global/Entity/positionStream.dart';
 import 'package:uni_player_2/global/Locator/locator.dart';
 import 'package:uni_player_2/global/domain/instances/instance.dart';
 import 'package:uni_player_2/global/domain/streams/streams.dart';
+import 'package:uni_player_2/presentation/homepage/widgets/songLIstbottom_sheet.dart';
 
 class DurationBar extends StatelessWidget {
   DurationBar({super.key});
@@ -119,6 +120,9 @@ class DurationBar extends StatelessWidget {
                 ),
                 materialButton(
                   child: CustomContainer(
+                    onpress: () {
+                      songlistBottomSheet(context);
+                    },
                     radius: 4,
                     width: 40,
                     child: iconWidget(

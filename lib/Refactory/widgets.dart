@@ -1,11 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:uni_player_2/app_Global_const/const.dart';
+import 'package:uni_player_2/global/Entity/songInfo_model.dart';
 
 import 'package:uni_player_2/global/Locator/locator.dart';
 import 'package:uni_player_2/global/Usecase/songlist_serviceImp.dart';
@@ -265,7 +267,6 @@ Widget materialButton({
 
 mixin IndexstreamInstances {
   final player = locator.get<Instances>().audioplayer;
-  final list = locator.get<SongListServiceImp>().songlist;
 }
 
 //TEXT STREAM CONTAINER;
@@ -286,36 +287,41 @@ class TextStreamwidget extends StatelessWidget with IndexstreamInstances {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<int?>(
-        stream: player.currentIndexStream,
-        builder: (context, state) {
-          if (state.data == null || state.hasError) {
-            return CustomText(
-              string:
-                  streamtext == StreamText.title ? 'Play Song' : '<Unknown>',
-              paddingtop: paddingtop,
-              overflow: overflow,
-              paddingbottom: paddingbottom,
-              color: Colors.white,
-              fonttype: FontType.aboretofont,
-              texttype: texttype,
-              fontweight: FontWeight.bold,
-            );
-          } else {
-            final title = list[state.data!].displayNameWOExt;
-            final artist = list[state.data!].artist;
-            return CustomText(
-              string: streamtext == StreamText.title ? title : artist!,
-              paddingtop: paddingtop,
-              overflow: overflow,
-              paddingbottom: paddingbottom,
-              color: Colors.white,
-              fonttype: FontType.aboretofont,
-              texttype: texttype,
-              fontweight: FontWeight.bold,
-            );
-          }
-        });
+    return BlocBuilder<HomepageBloc, HomepageState>(
+      builder: (context, bloc) {
+        return StreamBuilder<int?>(
+            stream: player.currentIndexStream,
+            builder: (context, state) {
+              if (state.data == null || state.hasError) {
+                return CustomText(
+                  string: streamtext == StreamText.title
+                      ? 'Play Song'
+                      : '<Unknown>',
+                  paddingtop: paddingtop,
+                  overflow: overflow,
+                  paddingbottom: paddingbottom,
+                  color: Colors.white,
+                  fonttype: FontType.aboretofont,
+                  texttype: texttype,
+                  fontweight: FontWeight.bold,
+                );
+              } else {
+                final title = bloc.modelList[state.data!].title;
+                final artist = bloc.modelList[state.data!].artist;
+                return CustomText(
+                  string: streamtext == StreamText.title ? title : artist,
+                  paddingtop: paddingtop,
+                  overflow: overflow,
+                  paddingbottom: paddingbottom,
+                  color: Colors.white,
+                  fonttype: FontType.aboretofont,
+                  texttype: texttype,
+                  fontweight: FontWeight.bold,
+                );
+              }
+            });
+      },
+    );
   }
 }
 
@@ -340,42 +346,52 @@ class ArtworkStreamWidget extends StatelessWidget with IndexstreamInstances {
       this.musicnotesize = 0.0});
   @override
   Widget build(BuildContext context) {
-    return Stack(fit: StackFit.expand, children: [
-      StreamBuilder<int?>(
-          stream: player.currentIndexStream,
-          builder: (context, state) {
-            if (state.data == null || state.hasError) {
-              log('data is null artwork');
-              if (nullwiget == StreamNullWidget.musicnote) {
-                return CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: iconWidget(
-                      icon: Icons.music_note_rounded,
+    return BlocBuilder<HomepageBloc, HomepageState>(
+      // buildWhen: (previous, current) {
+      //   return previous.artworkId != current.artworkId;
+      // },
+      builder: (context, bloc) {
+        return Stack(fit: StackFit.expand, children: [
+          StreamBuilder<int?>(
+              stream: player.currentIndexStream,
+              builder: (context, state) {
+                if (state.data == null || state.hasError) {
+                  log('data is null artwork');
+                  if (nullwiget == StreamNullWidget.musicnote) {
+                    return CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      child: iconWidget(
+                          icon: Icons.music_note_rounded,
+                          color: ConstColor.backgroundcolor,
+                          size: 100),
+                    );
+                  } else {
+                    return Container(
+                      width: double.infinity,
+                      height: double.infinity,
                       color: ConstColor.backgroundcolor,
-                      size: 100),
-                );
-              } else {
-                return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: ConstColor.backgroundcolor,
-                );
-              }
-            } else {
-              final id = list[state.data!].id;
+                    );
+                  }
+                } else {
+                  final id = bloc.modelList[state.data!].artworkid;
+                  // context.read<HomepageBloc>().add(GetArtworkEvent(
+                  //       artworkId: id,
+                  //     ));
 
-              log("select artwork id- ${id.toString()}");
-              return onlyqueryArtwork(
-                  artworkId: id,
-                  nullwiget: nullwiget,
-                  musicnotcolor: ConstColor.backgroundcolor,
-                  musicnotesize: 100);
-            }
-          }),
-      Center(
-        child: child,
-      )
-    ]);
+                  log("select artwork id- ${id.toString()}");
+                  return onlyqueryArtwork(
+                      artworkId: id,
+                      nullwiget: nullwiget,
+                      musicnotcolor: ConstColor.backgroundcolor,
+                      musicnotesize: 100);
+                }
+              }),
+          Center(
+            child: child,
+          )
+        ]);
+      },
+    );
   }
 }
 

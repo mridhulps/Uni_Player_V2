@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:uni_player_2/core/permission_acess.dart';
+import 'package:uni_player_2/global/Entity/songInfo_model.dart';
 
 import 'package:uni_player_2/global/Locator/locator.dart';
 import 'package:uni_player_2/global/Usecase/songlist_serviceImp.dart';
@@ -23,6 +24,14 @@ class SongListBloc extends Bloc<SongListEvent, SongListState> {
         (event, emit) => permenentDeniedPermission(event, emit));
 
     on<GetSonglist>((event, emit) => getSongList(event, emit));
+
+    on<SortingEvent>((event, emit) {
+      emit(state.copyWith(sortingtype: event.sort));
+
+      event.context
+          .read<SongListBloc>()
+          .add(GetSonglist(sorttype: state.sorttype));
+    });
   }
 
   //REQUIST PERMISSION METHODE;
@@ -48,7 +57,7 @@ class SongListBloc extends Bloc<SongListEvent, SongListState> {
         isloadings: true, permissiontype: PermissionType.granded));
 
     final songlist =
-        await locator.get<SongListServiceImp>().getSongList(event.sorttype);
+        await locator.get<SongListServiceImp>().getSongList(state.sorttype);
 
     songlist.fold((error) {
       return emit(

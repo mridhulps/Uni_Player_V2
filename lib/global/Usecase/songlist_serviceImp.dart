@@ -13,11 +13,10 @@ import 'package:uni_player_2/global/MainFailures/mainfailure.dart';
 import 'package:uni_player_2/global/domain/instances/instance.dart';
 
 class SongListServiceImp {
-  List<SongModel> songlist = [];
-
-  Future<Either<SongListError, List<SongModel>>> getSongList(
+  Future<Either<SongListError, List<CustomSongModel>>> getSongList(
       SongSortType sorttype) async {
     final querysong = locator.get<Instances>().audioQuery;
+    List<CustomSongModel> modellists = [];
 
     try {
       final songList = await querysong.querySongs(
@@ -27,20 +26,17 @@ class SongListServiceImp {
           ignoreCase: true);
 
       for (var song in songList) {
-        songlist.add(song);
+        final modellist = CustomSongModel(
+            songuri: song.uri,
+            title: song.displayNameWOExt,
+            artist: song.artist ?? '<Unknown>',
+            artworkid: song.id);
+
+        modellists.add(modellist);
       }
 
-      // final customsongmodellist = songList
-      //     .map((e) => CustomSongModel(
-      //         songuri: e.uri,
-      //         title: e.displayNameWOExt,
-      //         artist: e.artist ?? '<Unknown>',
-      //         artworkid: e.id,
-      //         isfavorite: false))
-      //     .toList();
-
       return right(
-        songList,
+        modellists,
       );
     } catch (e) {
       log('error catched in songlistserviceIemp');

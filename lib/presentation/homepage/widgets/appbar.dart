@@ -17,10 +17,10 @@ class AppbarCustom extends StatelessWidget {
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         centerTitle: true,
+        //ICONBUTTON,
         leading: iconWidget(
             icon: Icons.menu_rounded,
             ontap: () {
-              context.read<SongListBloc>().add(GetSonglist(context: context));
               Scaffold.of(context).openDrawer();
             }),
         title: Text('playing',

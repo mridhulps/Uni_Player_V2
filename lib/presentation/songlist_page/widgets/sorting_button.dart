@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -23,7 +21,7 @@ class SortingDropdown extends StatelessWidget {
         onSelected: (value) {
           context
               .read<SongListBloc>()
-              .add(GetSonglist(context: context, sorttype: value));
+              .add(SortingEvent(context: context, sort: value));
         },
         child: iconWidget(icon: Icons.sort_rounded, paddingright: 15),
         itemBuilder: (context) => [

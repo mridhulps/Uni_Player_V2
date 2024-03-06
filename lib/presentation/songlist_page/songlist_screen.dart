@@ -1,11 +1,13 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:uni_player_2/Refactory/funtions.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
+import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
 
 import 'package:uni_player_2/presentation/songlist_page/widgets/build_state.dart';
 import 'package:uni_player_2/presentation/songlist_page/widgets/sorting_button.dart';
@@ -17,6 +19,7 @@ class MusicListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<SongListBloc>().add(GetSonglist());
     return imageContainer(
       child: Scaffold(
         backgroundColor: Colors.transparent,

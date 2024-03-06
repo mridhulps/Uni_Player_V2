@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:uni_player_2/Refactory/funtions.dart';
 
 import 'package:uni_player_2/core/permission_acess.dart';
 import 'package:uni_player_2/global/Entity/songInfo_model.dart';
@@ -29,6 +30,10 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     on<ForwardEvent>((event, emit) => forWard(event, emit, audioplayer));
 
     on<BackwardEvent>((event, emit) => backWard(event, emit, audioplayer));
+
+    on<GetArtworkEvent>((event, emit) {
+      emit(state.copyWith(artworkId: event.artworkId));
+    });
   }
 
   generateAudiosource(
@@ -36,29 +41,19 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     List<UriAudioSource> audiosourcelist = [];
 
     try {
-      for (var song in event.songlist) {
-        final list = AudioSource.uri(Uri.parse(song.uri!));
+      for (var e in event.songlist) {
+        final list = AudioSource.uri(Uri.parse(e.songuri!));
 
         audiosourcelist.add(list);
       }
 
-      final customsongmodellist = event.songlist
-          .map((e) => CustomSongModel(
-              songuri: e.uri,
-              title: e.displayNameWOExt,
-              artist: e.artist ?? '<Unknown>',
-              artworkid: e.id,
-              isfavorite: false))
-          .toList();
-
       return emit(state.copyWith(
-          modellist: customsongmodellist,
+          modellist: event.songlist,
           audiosource: ConcatenatingAudioSource(children: audiosourcelist)));
     } catch (e) {
       log('generateaudiosource error catched - ${e.toString()}');
       return emit(state.copyWith(
-          songlist: event.songlist,
-          audiosource: ConcatenatingAudioSource(children: [])));
+          songlist: [], audiosource: ConcatenatingAudioSource(children: [])));
     }
   }
 
@@ -75,7 +70,11 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     } catch (e) {
       log('Error catched ${e.toString()}');
 
-      return emit(state.copyWith(isplaying: false, isFailures: true));
+      showtoastCustom('Something Went Wrong to Play');
+
+      return emit(state.copyWith(
+        isplaying: false,
+      ));
     }
   }
 

@@ -81,7 +81,7 @@ class HomePage extends StatelessWidget {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ],
-                                      ),
+                                      ), 
                                     )),
 
                                 //DURATION CONTAINER;

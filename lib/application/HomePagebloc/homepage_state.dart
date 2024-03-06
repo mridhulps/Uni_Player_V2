@@ -7,7 +7,7 @@ class HomepageState {
   final bool isplaying;
   final bool isFailure;
 
-  final int artworkId;
+  final int? artworkId;
   final String? currentsongtitle;
   final String? currentsongartist;
   final ConcatenatingAudioSource? audiosourceList;
@@ -19,8 +19,7 @@ class HomepageState {
     required this.permissionstat,
     required this.alreadyLoaded,
     required this.isplaying,
-    //required this.isnext,
-    required this.artworkId,
+    this.artworkId,
     this.currentsongartist,
     this.currentsongtitle,
     required this.isLoading,
@@ -65,7 +64,6 @@ final class HomepageInitial extends HomepageState {
     super.permissionstat = PermissionType.initial,
     super.alreadyLoaded = false,
     super.isplaying = false,
-    super.artworkId = 0,
     super.currentsongtitle = 'Play Song',
     super.currentsongartist = '',
     super.isLoading = false,
