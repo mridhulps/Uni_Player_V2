@@ -1,15 +1,20 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:uni_player_2/app_Global_const/const.dart';
+import 'package:uni_player_2/application/PlayListBloc/play_list_bloc_bloc.dart';
+import 'package:uni_player_2/global/Entity/playlist_model.dart';
+import 'package:uni_player_2/global/Entity/positionStream.dart';
 
-import 'package:uni_player_2/global/Locator/locator.dart';
-import 'package:uni_player_2/global/Usecase/songlist_serviceImp.dart';
 import 'package:uni_player_2/global/domain/instances/instance.dart';
+import 'package:uni_player_2/global/domain/streams/streams.dart';
+
+import '../application/HomePagebloc/homepage_bloc.dart';
 
 class CustomContainer extends StatelessWidget {
   final double? width;
@@ -62,73 +67,7 @@ class CustomContainer extends StatelessWidget {
   }
 }
 
-// THIS WIDGET USE FOR SONG ARTWORK IMAGE USE IN FULL SCREEN AND MAINLY USE FOR ACCESS TO ERRORBUILDER METHODE;
-
-Widget imageContainer({required Widget child, String? image, int? artworkId}) {
-  return Container(
-    child: image == null || image.isEmpty
-        ? Center(
-            child: child,
-          )
-        : Stack(fit: StackFit.expand, children: [
-            Image(
-                image: NetworkImage(image),
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                      color: ConstColor.backgroundcolor,
-                    )),
-            Center(
-              child: child,
-            )
-          ]),
-  );
-}
-
 enum ImageType { defaulte, image, artworkId }
-
-// Widget imageContainer2(
-//     {required Widget child,
-//     String? image,
-//     int? artworkId,
-//     ImageType imagetype = ImageType.defaulte}) {
-//   return Container(
-//       child: imagetype == ImageType.defaulte
-//           ? (image == null || image.isNotEmpty || artworkId != null)
-//               ? throw Exception('image type is defaulte')
-//               : Center(
-//                   child: child,
-//                 )
-//           : imagetype == ImageType.image
-//               ? (image == null || image.isEmpty)
-//                   ? throw Exception('image is null')
-//                   : Stack(fit: StackFit.expand, children: [
-//                       Image(
-//                           image: NetworkImage(image),
-//                           fit: BoxFit.cover,
-//                           errorBuilder: (context, error, stackTrace) =>
-//                               Container(
-//                                 color: ConstColor.backgroundcolor,
-//                               )),
-//                       Center(
-//                         child: child,
-//                       )
-//                     ])
-//               : imagetype == ImageType.artworkId
-//                   ? (artworkId == null)
-//                       ? Stack(fit: StackFit.expand, children: [
-//                           onlyqueryArtwork(artworkId: artworkId!),
-//                           Center(
-//                             child: child,
-//                           )
-//                         ])
-//                       : Stack(fit: StackFit.expand, children: [
-//                           onlyqueryArtwork(artworkId: artworkId),
-//                           Center(
-//                             child: child,
-//                           )
-//                         ])
-//                   : Container());
-// }
 
 //TEXT REFACTOR WIDGET;
 class CustomText extends StatelessWidget {
@@ -156,7 +95,7 @@ class CustomText extends StatelessWidget {
     this.fontsize,
     this.fontweight,
     this.overflow,
-    this.fonttype = FontType.aboretofont,
+    this.fonttype = FontType.roboto,
     this.texttype = TextType.deFault,
   });
 
@@ -170,27 +109,29 @@ class CustomText extends StatelessWidget {
             right: paddingright ?? 0.0,
             top: paddingtop ?? 0.0,
             bottom: paddingbottom ?? 0.0),
-        child: Text(string,
-            style: (texttype == TextType.deFault)
-                ? TextStyle(
-                    color: color,
-                    fontSize: fontsize,
-                    fontWeight: fontweight,
-                    overflow: overflow,
-                    fontFamily: fonttype == FontType.aboretofont
-                        ? GoogleFonts.aboreto().fontFamily
-                        : GoogleFonts.roboto().fontFamily)
-                : (texttype == TextType.titleLarge)
-                    ? buildCopywith(text.bodyLarge)
-                    : (texttype == TextType.titleMedium)
-                        ? buildCopywith(text.bodyMedium)
-                        : (texttype == TextType.titleSmall)
-                            ? buildCopywith(text.bodySmall)
-                            : (texttype == TextType.subtitleLarge)
-                                ? buildCopywith(text.labelLarge)
-                                : (texttype == TextType.subtitleMedium)
-                                    ? buildCopywith(text.labelMedium)
-                                    : buildCopywith(text.labelSmall)));
+        child: SizedBox(
+          child: Text(string,
+              style: (texttype == TextType.deFault)
+                  ? TextStyle(
+                      color: color ?? Colors.white,
+                      fontSize: fontsize,
+                      fontWeight: fontweight,
+                      overflow: overflow,
+                      fontFamily: fonttype == FontType.aboretofont
+                          ? GoogleFonts.aboreto().fontFamily
+                          : GoogleFonts.roboto().fontFamily)
+                  : (texttype == TextType.titleLarge)
+                      ? buildCopywith(text.bodyLarge)
+                      : (texttype == TextType.titleMedium)
+                          ? buildCopywith(text.bodyMedium)
+                          : (texttype == TextType.titleSmall)
+                              ? buildCopywith(text.bodySmall)
+                              : (texttype == TextType.subtitleLarge)
+                                  ? buildCopywith(text.labelLarge)
+                                  : (texttype == TextType.subtitleMedium)
+                                      ? buildCopywith(text.labelMedium)
+                                      : buildCopywith(text.labelSmall)),
+        ));
   }
 
   TextStyle buildCopywith(TextStyle? style) {
@@ -199,7 +140,7 @@ class CustomText extends StatelessWidget {
     }
 
     return style!.copyWith(
-        color: color,
+        color: color ?? Colors.white,
         fontSize: fontsize,
         fontWeight: fontweight,
         overflow: overflow,
@@ -220,6 +161,28 @@ enum TextType {
 }
 
 enum FontType { roboto, aboretofont }
+
+// THIS WIDGET USE FOR SONG ARTWORK IMAGE USE IN FULL SCREEN AND MAINLY USE FOR ACCESS TO ERRORBUILDER METHODE;
+
+Widget imageContainer({required Widget child, String? image, int? artworkId}) {
+  return Container(
+    child: image == null || image.isEmpty
+        ? Center(
+            child: child,
+          )
+        : Stack(fit: StackFit.expand, children: [
+            Image(
+                image: NetworkImage(image),
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Container(
+                      color: ConstColor.backgroundcolor,
+                    )),
+            Center(
+              child: child,
+            )
+          ]),
+  );
+}
 
 //ICON WIDGET;
 Widget iconWidget({
@@ -262,44 +225,63 @@ Widget materialButton({
 //USING FOR MULTIPLE TIME ;
 
 mixin IndexstreamInstances {
-  final player = locator.get<Instances>().audioplayer;
-  final list = locator.get<SongListServiceImp>().songlist;
+  final player = Instances.audioplayer;
 }
 
 //TEXT STREAM CONTAINER;
 
 class TextStreamwidget extends StatelessWidget with IndexstreamInstances {
   final StreamText streamtext;
-  TextStreamwidget({
-    super.key,
-    this.streamtext = StreamText.title,
-  });
+  final TextType texttype;
+  final double paddingtop;
+  final double paddingbottom;
+  final TextOverflow? overflow;
+
+  TextStreamwidget(
+      {super.key,
+      this.streamtext = StreamText.title,
+      this.texttype = TextType.deFault,
+      this.paddingtop = 0.0,
+      this.paddingbottom = 0.0,
+      this.overflow});
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<int?>(
-        stream: player.currentIndexStream,
-        builder: (context, state) {
-          if (state.data == null || state.hasError) {
-            return CustomText(
-              string: streamtext == StreamText.title ? 'Play Song' : 'Unknown',
-              color: Colors.white,
-              fonttype: FontType.aboretofont,
-              texttype: TextType.titleMedium,
-              fontweight: FontWeight.bold,
-            );
-          } else {
-            final title = list[state.data!].displayNameWOExt;
-            final artist = list[state.data!].artist;
-            return CustomText(
-              string: streamtext == StreamText.title ? title : artist!,
-              color: Colors.white,
-              fonttype: FontType.aboretofont,
-              texttype: TextType.titleMedium,
-              fontweight: FontWeight.bold,
-            );
-          }
-        });
+    return BlocBuilder<HomepageBloc, HomepageState>(
+      builder: (context, bloc) {
+        return StreamBuilder<int?>(
+            stream: player.currentIndexStream,
+            builder: (context, state) {
+              if (state.data == null || state.hasError) {
+                return CustomText(
+                  string: streamtext == StreamText.title
+                      ? 'Play Song'
+                      : '<Unknown>',
+                  paddingtop: paddingtop,
+                  overflow: overflow,
+                  paddingbottom: paddingbottom,
+                  color: Colors.white,
+                  fonttype: FontType.aboretofont,
+                  texttype: texttype,
+                  fontweight: FontWeight.bold,
+                );
+              } else {
+                final title = bloc.currentPLayingList[state.data!].title;
+                final artist = bloc.currentPLayingList[state.data!].artist;
+                return CustomText(
+                  string: streamtext == StreamText.title ? title : artist,
+                  paddingtop: paddingtop,
+                  overflow: overflow,
+                  paddingbottom: paddingbottom,
+                  color: Colors.white,
+                  fonttype: FontType.aboretofont,
+                  texttype: texttype,
+                  fontweight: FontWeight.bold,
+                );
+              }
+            });
+      },
+    );
   }
 }
 
@@ -307,51 +289,61 @@ enum StreamText { title, artist }
 
 //ARTWORK STREAM CONTAINER;
 
-// ignore: must_be_immutable
 class ArtworkStreamWidget extends StatelessWidget with IndexstreamInstances {
-  Widget? child;
+  final Widget? child;
 
-  StreamNullWidget? nullwiget;
+  final StreamNullWidget? nullwiget;
+
+  final double? musicnotesize;
+  final Color? musicnotcolor;
 
   ArtworkStreamWidget(
-      {super.key, this.child, this.nullwiget = StreamNullWidget.musicnote});
-
+      {super.key,
+      this.child,
+      this.nullwiget = StreamNullWidget.musicnote,
+      this.musicnotcolor,
+      this.musicnotesize = 0.0});
   @override
   Widget build(BuildContext context) {
-    return Stack(fit: StackFit.expand, children: [
-      StreamBuilder<int?>(
-          stream: player.currentIndexStream,
-          builder: (context, state) {
-            //   log(state.data.toString());
-            if (state.data == null || state.hasError) {
-              if (nullwiget == StreamNullWidget.musicnote) {
-                return CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: iconWidget(
-                      icon: Icons.music_note_rounded,
+    return BlocBuilder<HomepageBloc, HomepageState>(
+      builder: (context, states) {
+        return Stack(fit: StackFit.expand, children: [
+          StreamBuilder<int?>(
+              stream: player.currentIndexStream,
+              builder: (context, state) {
+                print('artworkstreambuilder builded');
+                if (state.data == null || state.hasError) {
+                  if (nullwiget == StreamNullWidget.musicnote) {
+                    return CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      child: iconWidget(
+                          icon: Icons.music_note_rounded,
+                          color: ConstColor.backgroundcolor,
+                          size: 100),
+                    );
+                  } else {
+                    return Container(
+                      width: double.infinity,
+                      height: double.infinity,
                       color: ConstColor.backgroundcolor,
-                      size: 100),
-                );
-              } else {
-                return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: ConstColor.backgroundcolor,
-                );
-              }
-            } else {
-              final id = list[state.data!].id;
-              return onlyqueryArtwork(
-                  artworkId: id,
-                  nullwiget: nullwiget,
-                  musicnotcolor: ConstColor.backgroundcolor,
-                  musicnotesize: 100);
-            }
-          }),
-      Center(
-        child: child,
-      )
-    ]);
+                    );
+                  }
+                } else {
+                  final id = states.currentPLayingList[state.data!].artworkid;
+
+                  return onlyqueryArtwork(
+                      artworkId: id,
+                      nullwiget: nullwiget,
+                      musicnotcolor: ConstColor.backgroundcolor,
+                      musicnotesize: 100);
+                }
+              }),
+          Center(
+            child: child,
+          )
+        ]);
+      },
+    );
   }
 }
 
@@ -393,4 +385,85 @@ Widget onlyqueryArtwork(
       );
     },
   );
+}
+
+//  REFACTOR NAVIGATOR
+
+customNavigator(BuildContext context, Widget page) {
+  return Navigator.of(context)
+      .push(MaterialPageRoute(builder: ((context) => page)));
+}
+
+//DROPDOWN MAIN WIDGET;
+
+class CustomDropDownButton extends StatelessWidget {
+  final Color? backgroundcolor;
+  final List<PopupMenuEntry<dynamic>> customitem;
+  final Widget? icon;
+  const CustomDropDownButton(
+      {super.key, required this.customitem, this.icon, this.backgroundcolor});
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<dynamic>(
+        shape: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide.none),
+        clipBehavior: Clip.antiAlias,
+        color: backgroundcolor ?? ConstColor.backgroundcolor,
+        elevation: 10,
+        child: icon,
+        itemBuilder: (context) => customitem);
+  }
+}
+
+// REFACTOR TEXTFIELD;
+
+class CustomTextField extends StatelessWidget {
+  final TextEditingController? controller;
+  final String? hintname;
+
+  const CustomTextField({super.key, this.controller, this.hintname});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 30),
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+      ),
+      child: TextField(
+        controller: controller,
+        textInputAction: TextInputAction.done,
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            prefix: const SizedBox(
+              width: 15,
+            ),
+            hintText: hintname,
+            hintStyle: TextStyle(
+                fontSize: 15,
+                color: Colors.black45,
+                fontFamily: GoogleFonts.roboto.toString())),
+      ),
+    );
+  }
+}
+
+validation(TextEditingController controller, BuildContext context) {
+  final text = controller.text;
+
+  if (text.isEmpty) {
+    return;
+  } else {
+    final model = CustomPlayListModel(songList: [], playistName: text);
+
+    context
+        .read<PlayListBlocBloc>()
+        .add(AddPlayListEvent(playlistmodel: model));
+
+    controller.clear();
+  }
 }

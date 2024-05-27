@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
-import 'package:uni_player_2/presentation/testingpage.dart';
+import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
+import 'package:uni_player_2/presentation/homepage/widgets/option_dropdown.dart';
 
 class AppbarCustom extends StatelessWidget {
   final double? paddingbottom;
@@ -16,22 +19,21 @@ class AppbarCustom extends StatelessWidget {
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         centerTitle: true,
+        //ICONBUTTON,
         leading: iconWidget(
-          icon: Icons.menu_rounded,
-          ontap: () => Scaffold.of(context).openDrawer(),
-        ),
+            icon: Icons.menu_rounded,
+            ontap: () {
+              Scaffold.of(context).openDrawer();
+              context.read<SongListBloc>().add(GetSonglist());
+            }),
         title: Text('playing',
             style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 fontWeight: FontWeight.bold,
                 fontFamily: GoogleFonts.aboreto().fontFamily)),
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: iconWidget(
-              icon: Icons.menu_rounded,
-              ontap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (ctx) =>  TestingScreen())),
-            ),
+            padding: EdgeInsets.only(right: 0),
+            child: OptionDropdownButton(),
           )
         ],
       ),

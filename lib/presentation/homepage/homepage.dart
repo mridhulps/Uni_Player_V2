@@ -1,16 +1,15 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:uni_player_2/Refactory/funtions.dart';
 import 'package:uni_player_2/Refactory/widgets.dart';
-import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
 
 import 'package:uni_player_2/presentation/homepage/widgets/appbar.dart';
 import 'package:uni_player_2/presentation/homepage/widgets/artwork_image.dart';
 import 'package:uni_player_2/presentation/homepage/widgets/controll_system.dart';
 import 'package:uni_player_2/presentation/homepage/widgets/duration_bar.dart';
+
 import 'package:uni_player_2/presentation/songlist_page/songlist_screen.dart';
 
 class HomePage extends StatelessWidget {
@@ -46,7 +45,6 @@ class HomePage extends StatelessWidget {
                     Expanded(
                         flex: 6,
                         child: Container(
-                            // color: Colors.lightBlue,
                             padding: const EdgeInsets.only(
                                 left: 5, right: 5, top: 5, bottom: 20),
                             child: Column(
@@ -54,8 +52,14 @@ class HomePage extends StatelessWidget {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 // ARTWORK CONTAINER ;
-                                const ArtWorkWidget(),
-                                //SPACER;
+
+                                ArtworkBox(
+                                  child: ArtworkStreamWidget(
+                                    nullwiget: StreamNullWidget.musicnote,
+                                  ),
+                                ),
+
+                                //TITLE AND ARTIST WITH INDEXSTREAWM;
 
                                 CustomContainer(
                                     color: Colors.transparent,
@@ -67,9 +71,13 @@ class HomePage extends StatelessWidget {
                                         children: [
                                           TextStreamwidget(
                                             streamtext: StreamText.title,
+                                            texttype: TextType.titleMedium,
+                                            paddingbottom: 10,
                                           ),
                                           TextStreamwidget(
                                             streamtext: StreamText.artist,
+                                            texttype: TextType.subtitleMedium,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ],
                                       ),

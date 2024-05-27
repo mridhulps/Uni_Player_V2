@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:on_audio_query/on_audio_query.dart';
+
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
 import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
+import 'package:uni_player_2/application/PlayListBloc/play_list_bloc_bloc.dart';
+
+import 'package:uni_player_2/global/Entity/songInfo_model.dart';
 
 class SongLIstWidget extends StatelessWidget {
-  final List<SongModel> songlist;
+  final List<CustomSongModel> songlist;
+  final ScrollController? controller;
 
-  const SongLIstWidget({super.key, required this.songlist});
+  const SongLIstWidget({super.key, required this.songlist, this.controller});
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+        controller: controller,
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) {
@@ -23,32 +28,29 @@ class SongLIstWidget extends StatelessWidget {
               backgroundColor: Colors.transparent,
               radius: 20,
               child: onlyqueryArtwork(
-                  artworkId: song.id,
+                  artworkId: song.artworkid,
                   nullwiget: StreamNullWidget.musicnote,
                   musicnotesize: 25),
             ),
             title: CustomText(
-                string: song.displayNameWOExt,
+                string: song.title,
                 fontweight: FontWeight.bold,
                 fonttype: FontType.roboto,
                 texttype: TextType.titleMedium,
                 color: ConstColor.whitecolor),
             subtitle: CustomText(
-              string: song.artist ?? '<UnKnown>',
+              string: song.artist,
               fonttype: FontType.roboto,
-              texttype: TextType.subtitleMedium,
               color: Colors.white54,
             ),
-            trailing: iconWidget(icon: Icons.more_vert),
-            onTap: () {
-              context.read<HomepageBloc>().add(PlaySongEvent(
-                  currentsonguri: song.uri ?? '', currentIndex: index));
-
-              // context.read<HomepageBloc>().add(GetArtworkEvent(
-              //     artworkId: song.id, title: song.displayNameWOExt));
-
-              // context.read<HomepageBloc>().add(IndexStreamEvent());
-            },
+            trailing: iconWidget(
+                icon: Icons.favorite,
+                ontap: () {
+                  context
+                      .read<PlayListBlocBloc>()
+                      .add(AddFavoriteEvent(favsong: song));
+                }),
+            onTap: () => onClick(context, songlist, index),
           );
         },
         separatorBuilder: (context, index) {
@@ -56,4 +58,13 @@ class SongLIstWidget extends StatelessWidget {
         },
         itemCount: songlist.length);
   }
+}
+
+void onClick(
+    BuildContext context, List<CustomSongModel> songlist, int currentindex) {
+  context
+      .read<HomepageBloc>()
+      .add(GenerateAudioSourceEvent(songlist: songlist));
+      
+  context.read<HomepageBloc>().add(PlaySongEvent(currentIndex: currentindex));
 }

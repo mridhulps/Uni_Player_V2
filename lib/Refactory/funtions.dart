@@ -10,7 +10,7 @@ Size screnRatio({required BuildContext context}) {
   return MediaQuery.of(context).size;
 }
 
-showtoastCustom(String message) {
+customToast(String message) {
   Fluttertoast.cancel();
   Fluttertoast.showToast(
       msg: message,

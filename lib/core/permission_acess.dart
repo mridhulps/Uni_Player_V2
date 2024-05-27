@@ -1,11 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:permission_handler/permission_handler.dart';
-import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
-import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
 
 class BetterPermission {
   Future status(Permission permissionstat, BuildContext context) async {

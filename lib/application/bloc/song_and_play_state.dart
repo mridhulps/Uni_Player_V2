@@ -1,19 +1,18 @@
-part of 'homepage_bloc.dart';
+part of 'song_and_play_bloc.dart';
 
-class HomepageState {
+class SongAndPlayState {
   final PermissionType permissionstat;
   final bool alreadyLoaded;
   final bool isLoading;
   final bool isplaying;
   final bool isFailure;
-
   final int? currentIndex;
 
   final ConcatenatingAudioSource? audiosourceList;
 
   final List<CustomSongModel> currentPLayingList;
 
-  HomepageState(
+  SongAndPlayState(
       {required this.permissionstat,
       required this.alreadyLoaded,
       required this.isplaying,
@@ -23,7 +22,7 @@ class HomepageState {
       this.currentIndex,
       required this.currentPLayingList});
 
-  HomepageState copyWith(
+  SongAndPlayState copyWith(
       {bool? isplaying,
       int? currentindex,
       bool? alreadyLoaded,
@@ -35,7 +34,7 @@ class HomepageState {
       bool? isFailures,
       List<CustomSongModel>? currentsonglist,
       ConcatenatingAudioSource? audiosource}) {
-    return HomepageState(
+    return SongAndPlayState(
         alreadyLoaded: alreadyLoaded ?? this.alreadyLoaded,
         currentIndex: currentindex ?? currentIndex,
         permissionstat: permissiontype ?? permissionstat,
@@ -47,8 +46,8 @@ class HomepageState {
   }
 }
 
-final class HomepageInitial extends HomepageState {
-  HomepageInitial(
+final class SongAndPlayInitial extends SongAndPlayState {
+  SongAndPlayInitial(
       {super.permissionstat = PermissionType.initial,
       super.alreadyLoaded = false,
       super.isplaying = false,

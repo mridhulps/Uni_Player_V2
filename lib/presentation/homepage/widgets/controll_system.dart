@@ -9,14 +9,14 @@ import 'package:just_audio/just_audio.dart';
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
 import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
-import 'package:uni_player_2/global/Locator/locator.dart';
+
 import 'package:uni_player_2/global/domain/instances/instance.dart';
 
 class ControllSystem extends StatelessWidget {
   ControllSystem({super.key});
   final color = Colors.white;
 
-  final player = locator.get<Instances>().audioplayer;
+  final player = Instances.audioplayer;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,6 @@ class ControllSystem extends StatelessWidget {
               ),
             ),
           ),
-
           StreamBuilder<PlayerState>(
             stream: player.playerStateStream,
             builder: (context, state) {
@@ -74,26 +73,6 @@ class ControllSystem extends StatelessWidget {
               }
             },
           ),
-
-          // InkWell(onTap: () {
-          //   context.read<HomepageBloc>().add(PlayAndPauseEvent());
-          // }, child: BlocBuilder<HomepageBloc, HomepageState>(
-          //   builder: (context, state) {
-          //     return materialButton(
-          //         radius: 30,
-          //         child: state.isplaying == true
-          //             ? iconWidget(
-          //                 icon: Icons.pause_outlined,
-          //                 color: ConstColor.buttoncolor,
-          //                 size: 40,
-          //               )
-          //             : iconWidget(
-          //                 icon: Icons.play_arrow_rounded,
-          //                 color: ConstColor.buttoncolor,
-          //                 size: 45,
-          //               ));
-          //   },
-          // )),
           InkWell(
             onTap: () {
               context.read<HomepageBloc>().add(ForwardEvent());

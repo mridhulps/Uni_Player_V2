@@ -4,14 +4,17 @@ import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
 
 import 'package:uni_player_2/global/Entity/positionStream.dart';
-import 'package:uni_player_2/global/Locator/locator.dart';
+
 import 'package:uni_player_2/global/domain/instances/instance.dart';
 import 'package:uni_player_2/global/domain/streams/streams.dart';
+import 'package:uni_player_2/presentation/homepage/widgets/playlist_bottomsheet.dart';
+
+import 'package:uni_player_2/presentation/homepage/widgets/songLIst_bottomsheet.dart';
 
 class DurationBar extends StatelessWidget {
   DurationBar({super.key});
 
-  final player = locator.get<Instances>().audioplayer;
+  final player = Instances.audioplayer;
 
   @override
   Widget build(BuildContext context) {
@@ -28,37 +31,58 @@ class DurationBar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 StreamBuilder<PositionDataStream>(
-                    stream: positionDataStream,
+                    stream: positionDataStream(),
                     builder: (context, state) {
                       return CustomText(
                           string: state.data == null || state.hasError
                               ? '0.00'
-                              : state.data!.positionsstream
-                                  .toString()
-                                  .split('.')
-                                  .first,
+                              : (state.data!.positionsstream
+                                          .toString()
+                                          .substring(0, 1) ==
+                                      '0')
+                                  ? state.data!.positionsstream
+                                      .toString()
+                                      .substring(2)
+                                      .split('.')
+                                      .first
+                                  : state.data!.positionsstream
+                                      .toString()
+                                      .split('.')
+                                      .first,
                           paddingleft: 20,
+                          color: ConstColor.backgroundcolor,
                           fontweight: FontWeight.bold);
                     }),
                 StreamBuilder<PositionDataStream?>(
-                    stream: positionDataStream,
+                    stream: positionDataStream(),
                     builder: (context, state) {
                       return CustomText(
-                          string: state.data == null || state.hasError
-                              ? '0.00'
-                              : state.data!.durationstream
-                                  .toString()
-                                  .split('.')
-                                  .first,
-                          paddingright: 20,
-                          fontweight: FontWeight.bold);
+                        string: (state.data == null || state.hasError)
+                            ? '0.00'
+                            : (state.data!.durationstream
+                                        .toString()
+                                        .substring(0, 1) ==
+                                    '0')
+                                ? state.data!.durationstream
+                                    .toString()
+                                    .substring(2)
+                                    .split('.')
+                                    .first
+                                : state.data!.durationstream
+                                    .toString()
+                                    .split('.')
+                                    .first,
+                        paddingright: 20,
+                        fontweight: FontWeight.bold,
+                        color: ConstColor.backgroundcolor,
+                      );
                     }),
               ],
             ),
           ),
           //DURATION BAR;
           StreamBuilder<PositionDataStream>(
-              stream: positionDataStream,
+              stream: positionDataStream(),
               builder: (context, state) {
                 final data = (state.data == null || state.hasError)
                     ? PositionDataStream(
@@ -104,6 +128,9 @@ class DurationBar extends StatelessWidget {
                       color: ConstColor.buttoncolor,
                       size: 25,
                     ),
+                    onpress: () {
+                      playListBottomSheet(context);
+                    },
                   ),
                 ),
                 materialButton(
@@ -115,10 +142,14 @@ class DurationBar extends StatelessWidget {
                       color: ConstColor.buttoncolor,
                       size: 25,
                     ),
+                    onpress: () {},
                   ),
                 ),
                 materialButton(
                   child: CustomContainer(
+                    onpress: () {
+                      songListBottomSheet(context);
+                    },
                     radius: 4,
                     width: 40,
                     child: iconWidget(

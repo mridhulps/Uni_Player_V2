@@ -9,5 +9,14 @@ class DeniedPermission extends SongListEvent {}
 class PermenentDeniedPermission extends SongListEvent {}
 
 class GetSonglist extends SongListEvent {
-  GetSonglist();
+  final SongSortType sorttype;
+
+  GetSonglist({this.sorttype = SongSortType.DATE_ADDED});
+}
+
+class SortingEvent extends SongListEvent {
+  final SongSortType sort;
+  final BuildContext context;
+
+  SortingEvent({required this.sort, required this.context});
 }
