@@ -12,6 +12,7 @@ playListBottomSheet(BuildContext context) => showModalBottomSheet(
           builder: (context, controller) {
             return PlayListTile(
               controller: controller,
+              ontapmode: OnTapMode.addsong,
             );
           });
     });

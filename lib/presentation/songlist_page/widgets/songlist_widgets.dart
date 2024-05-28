@@ -44,13 +44,16 @@ class SongLIstWidget extends StatelessWidget {
               fonttype: FontType.roboto,
               color: Colors.white54,
             ),
-            trailing: iconWidget(
+            trailing: InkWell(
+              onTap: () {
+                context
+                    .read<PlayListBlocBloc>()
+                    .add(AddFavoriteEvent(favsong: song));
+              },
+              child: iconWidget(
                 icon: Icons.favorite,
-                ontap: () {
-                  context
-                      .read<PlayListBlocBloc>()
-                      .add(AddFavoriteEvent(favsong: song));
-                }),
+              ),
+            ),
             onTap: () => onClick(context, songlist, index),
           );
         },

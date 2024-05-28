@@ -64,20 +64,18 @@ class FavoriteButton extends StatelessWidget {
         }
         final currentsong = state.currentSonglist[state.currentIndex];
 
-        for (int i = 0; i < state.favoriteList.length; i++) {
-          log('loop called');
-          if (currentsong.artworkid == state.favoriteList[i].artworkid) {
+        for (var id in state.favoriteList) {
+          if (currentsong.artworkid == id.artworkid) {
             return iconWidget(icon: Icons.favorite, color: Colors.red);
           }
+          break;
         }
-        return iconWidget(
-            ontap: () {
-              context
-                  .read<PlayListBlocBloc>()
-                  .add(AddFavoriteEvent(favsong: currentsong));
-            },
-            icon: Icons.favorite_outline,
-            color: Colors.white);
+        return InkWell(
+            onTap: () => context
+                .read<PlayListBlocBloc>()
+                .add(AddFavoriteEvent(favsong: currentsong)),
+            child:
+                iconWidget(icon: Icons.favorite_outline, color: Colors.white));
       },
     );
   }

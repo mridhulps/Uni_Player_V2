@@ -8,6 +8,7 @@ import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
 
 import 'package:uni_player_2/application/PlayListBloc/play_list_bloc_bloc.dart';
+import 'package:uni_player_2/application/SongsAndPlayBloc/song_and_play_bloc.dart';
 import 'package:uni_player_2/presentation/Favorite_page/favorite_page.dart';
 
 import 'package:uni_player_2/presentation/playlistSongListShowpage/playlistshowsonglist.dart';
@@ -20,66 +21,85 @@ class PlayListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: ConstColor.backgroundcolor,
-        width: screnRatio(context: context).width,
-        height: screnRatio(context: context).height,
-        child: BlocBuilder<PlayListBlocBloc, PlayListBlocState>(
-            builder: (context, state) {
-          return Column(
-            children: [
-              const CustomTextField(
-                hintname: 'Search',
-              ),
-              //FAVORITE LIST;
-              ListTile(
-                leading: iconWidget(icon: Icons.favorite, color: Colors.red),
-                title: const CustomText(
-                  string: 'Favorites',
-                ),
-                trailing: iconWidget(icon: Icons.more_vert),
-                onTap: () => customNavigator(context, const FavoritePage()),
-              ),
+    return BlocBuilder<SongAndPlayBloc, SongAndPlayState>(
+      builder: (context, songbloc) {
+        return Container(
+            color: ConstColor.backgroundcolor,
+            width: screnRatio(context: context).width,
+            height: screnRatio(context: context).height,
+            child: BlocBuilder<PlayListBlocBloc, PlayListBlocState>(
+                builder: (context, state) {
+              return Column(
+                children: [
+                  const CustomTextField(
+                    hintname: 'Search',
+                  ),
+                  //FAVORITE LIST;
+                  ListTile(
+                    leading:
+                        iconWidget(icon: Icons.favorite, color: Colors.red),
+                    title: const CustomText(
+                      string: 'Favorites',
+                    ),
+                    trailing: iconWidget(icon: Icons.more_vert),
+                    onTap: () {
+                      if (ontapmode == null || songbloc.currentIndex == null) {
+                      } else if (ontapmode == OnTapMode.addsong) {
+                        context.read<PlayListBlocBloc>().add(AddFavoriteEvent(
+                            favsong: songbloc
+                                .currentSongList[songbloc.currentIndex!]));
+                      } else {
+                        customNavigator(context, const FavoritePage());
+                      }
+                    },
+                  ),
 
-              //CREATED PLAYLISTS;
-              Expanded(
-                child: ListView.separated(
-                    controller: controller,
-                    itemBuilder: (context, index) {
-                      final playlist = state.playLists[index];
+                  //CREATED PLAYLISTS;
+                  Expanded(
+                    child: ListView.separated(
+                        controller: controller,
+                        itemBuilder: (context, index) {
+                          final playlist = state.playLists[index];
 
-                      return ListTile(
-                        leading:
-                            iconWidget(icon: Icons.my_library_music_rounded),
-                        title: CustomText(
-                          string: playlist.playistName,
-                          color: Colors.white,
-                        ),
-                        trailing: iconWidget(icon: Icons.more_vert),
-                        onTap: () {
-                          if (ontapmode == null) {
-                          } else if (ontapmode == OnTapMode.addsong) {
-                            context.read<PlayListBlocBloc>().add(
-                                AddSongsToCreatePlayListEvent(
-                                    selectplaylist: index));
-                          } else {
-                            customNavigator(
-                                context,
-                                PlayListSongList(
-                                    songlist: state.playLists[index].songList,
-                                    playlistname: playlist.playistName));
-                          }
+                          return ListTile(
+                            leading: iconWidget(
+                                icon: Icons.my_library_music_rounded),
+                            title: CustomText(
+                              string: playlist.playistName,
+                              color: Colors.white,
+                            ),
+                            trailing: iconWidget(icon: Icons.more_vert),
+                            onTap: () {
+                              if (ontapmode == null ||
+                                  songbloc.currentIndex == null) {
+                              } else if (ontapmode == OnTapMode.addsong) {
+                                context.read<PlayListBlocBloc>().add(
+                                    AddSongsToCreatePlayListEvent(
+                                        selectplaylist: index,
+                                        selectSong: songbloc.currentSongList[
+                                            songbloc.currentIndex!]));
+                              } else {
+                                //REFACTOR NAVIGATOR;
+                                customNavigator(
+                                    context,
+                                    PlayListSongList(
+                                        songlist:
+                                            state.playLists[index].songList,
+                                        playlistname: playlist.playistName));
+                              }
+                            },
+                          );
                         },
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox();
-                    },
-                    itemCount: state.playLists.length),
-              ),
-            ],
-          );
-        }));
+                        separatorBuilder: (context, index) {
+                          return const SizedBox();
+                        },
+                        itemCount: state.playLists.length),
+                  ),
+                ],
+              );
+            }));
+      },
+    );
   }
 }
 

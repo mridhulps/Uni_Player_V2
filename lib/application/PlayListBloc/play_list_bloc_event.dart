@@ -22,8 +22,10 @@ class AddPlayListEvent extends PlayListBlocEvent {
 
 class AddSongsToCreatePlayListEvent extends PlayListBlocEvent {
   final int selectplaylist;
+  final CustomSongModel selectSong;
 
-  AddSongsToCreatePlayListEvent({required this.selectplaylist});
+  AddSongsToCreatePlayListEvent(
+      {required this.selectplaylist, required this.selectSong});
 }
 
 class AddcurrentSongList extends PlayListBlocEvent {

@@ -68,8 +68,6 @@ class CustomContainer extends StatelessWidget {
   }
 }
 
-enum ImageType { defaulte, image, artworkId }
-
 //TEXT REFACTOR WIDGET;
 class CustomText extends StatelessWidget {
   final String string;
@@ -192,17 +190,13 @@ Widget iconWidget({
   Color color = Colors.white,
   double? paddingleft,
   double? paddingright,
-  Function()? ontap,
 }) {
   return Padding(
     padding: EdgeInsets.only(left: paddingleft ?? 0, right: paddingright ?? 0),
-    child: InkWell(
-      onTap: ontap,
-      child: Icon(
-        icon,
-        size: size,
-        color: color,
-      ),
+    child: Icon(
+      icon,
+      size: size,
+      color: color,
     ),
   );
 }
@@ -220,6 +214,21 @@ Widget materialButton({
     color: Colors.white,
     child: CircleAvatar(
         backgroundColor: buttoncolor, radius: radius, child: child),
+  );
+}
+
+Widget customButton(
+    {String? name, VoidCallback? ontap, BuildContext? context}) {
+  return ElevatedButton(
+    style: const ButtonStyle(
+        backgroundColor: MaterialStatePropertyAll<Color>(Colors.white)),
+    onPressed: () {
+      ontap != null ? ontap() : null;
+    },
+    child: CustomText(
+      string: name ?? '',
+      color: Colors.black,
+    ),
   );
 }
 
@@ -308,6 +317,9 @@ class ArtworkStreamWidget extends StatelessWidget with IndexstreamInstances {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SongAndPlayBloc, SongAndPlayState>(
+      buildWhen: (previous, current) {
+        return previous.currentIndex != current.currentIndex;
+      },
       builder: (context, states) {
         return Stack(fit: StackFit.expand, children: [
           StreamBuilder<int?>(
@@ -329,8 +341,13 @@ class ArtworkStreamWidget extends StatelessWidget with IndexstreamInstances {
                       color: ConstColor.backgroundcolor,
                     );
                   }
+                  //NOT NULL SCENARIO;
                 } else {
                   final id = states.currentSongList[state.data!].artworkid;
+
+                  context
+                      .read<SongAndPlayBloc>()
+                      .add(AddCurrentIndexEvents(currentIndex: state.data!));
 
                   return onlyqueryArtwork(
                       artworkId: id,
@@ -444,10 +461,10 @@ class CustomTextField extends StatelessWidget {
               width: 15,
             ),
             hintText: hintname,
-            hintStyle: TextStyle(
-                fontSize: 15,
-                color: Colors.black45,
-                fontFamily: GoogleFonts.roboto.toString())),
+            hintStyle: const TextStyle(
+              fontSize: 15,
+              color: Colors.black45,
+            )),
       ),
     );
   }

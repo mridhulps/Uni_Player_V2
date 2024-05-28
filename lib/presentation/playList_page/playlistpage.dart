@@ -25,14 +25,20 @@ class PlayListScreen extends StatelessWidget {
             fontweight: FontWeight.bold,
           ),
           actions: [
-            iconWidget(
+            InkWell(
+              onTap: () {
+                context.read<PlayListBlocBloc>().add(DeleteAllEvent());
+              },
+              child: iconWidget(
                 icon: Icons.delete_forever_rounded,
-                ontap: () {
-                  context.read<PlayListBlocBloc>().add(DeleteAllEvent());
-                })
+              ),
+            )
           ],
         ),
-        body: const SafeArea(child: PlayListTile(ontapmode: OnTapMode.gotosongList,)),
+        body: const SafeArea(
+            child: PlayListTile(
+          ontapmode: OnTapMode.gotosongList,
+        )),
         floatingActionButton: FloatingActionButton.extended(
             backgroundColor: Colors.white,
             onPressed: () {

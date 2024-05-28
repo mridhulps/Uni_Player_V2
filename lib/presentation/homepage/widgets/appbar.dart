@@ -23,12 +23,15 @@ class AppbarCustom extends StatelessWidget {
         //ICONBUTTON,
         leading: BlocBuilder<SongAndPlayBloc, SongAndPlayState>(
           builder: (context, state) {
-            return iconWidget(
+            return InkWell(
+              onTap: () {
+                Scaffold.of(context).openDrawer();
+                context.read<SongAndPlayBloc>().add(GetSonglist());
+              },
+              child: iconWidget(
                 icon: Icons.menu_rounded,
-                ontap: () {
-                  Scaffold.of(context).openDrawer();
-                  context.read<SongAndPlayBloc>().add(GetSonglist());
-                });
+              ),
+            );
           },
         ),
         title: Text('playing',

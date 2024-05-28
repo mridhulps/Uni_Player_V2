@@ -34,7 +34,7 @@ class PlayListBlocBloc extends Bloc<PlayListBlocEvent, PlayListBlocState> {
   addtofavorite(AddFavoriteEvent event, Emitter<PlayListBlocState> emit) {
     final song = event.favsong;
 
-    final copylist = List<CustomSongModel>.from(state.favoriteList);
+    final copylist = List<CustomSongModel>.from(state.favoriteList.reversed);
 
     copylist.add(song);
     customToast('Added to Favorite');
@@ -46,12 +46,12 @@ class PlayListBlocBloc extends Bloc<PlayListBlocEvent, PlayListBlocState> {
       AddSongsToCreatePlayListEvent event, Emitter<PlayListBlocState> emit) {
     final selectplaylist = event.selectplaylist;
 
-    final currentsong = state.currentSonglist[state.currentIndex];
+    final currentsong = event.selectSong;
 
     state.playLists[selectplaylist].songList.add(currentsong);
     emit(state);
     customToast(
-        'Song Added to -( ${state.playLists[selectplaylist].playistName} )');
+        'Song Added to  ${state.playLists[selectplaylist].playistName}');
   }
 
   deleteAllPlaylist(DeleteAllEvent event, Emitter<PlayListBlocState> emit) {

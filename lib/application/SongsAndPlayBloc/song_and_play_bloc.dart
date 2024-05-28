@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:uni_player_2/Refactory/funtions.dart';
+import 'package:uni_player_2/application/PlayListBloc/play_list_bloc_bloc.dart';
 import 'package:uni_player_2/core/permission_acess.dart';
 import 'package:uni_player_2/global/Entity/songInfo_model.dart';
 import 'package:uni_player_2/global/Locator/locator.dart';
@@ -46,6 +47,12 @@ class SongAndPlayBloc extends Bloc<SongAndPlayEvent, SongAndPlayState> {
           .read<SongAndPlayBloc>()
           .add(GetSonglist(sorttype: state.sorttype));
     });
+
+    on<AddCurrentIndexEvents>((event, emit) {
+      final index = event.currentIndex;
+
+      emit(state.copyWith(currentindex: index));
+    });
   }
 
   //REQUIST PERMISSION METHODE;
@@ -78,7 +85,9 @@ class SongAndPlayBloc extends Bloc<SongAndPlayEvent, SongAndPlayState> {
 
       emit(state.copyWith(
         currentsonglist: event.songlist,
-        audiosource: ConcatenatingAudioSource(children: audiosourcelist),
+        audiosource: ConcatenatingAudioSource(
+          children: audiosourcelist,
+        ),
       ));
     } catch (e) {
       log('generateaudiosource error catched - ${e.toString()}');
@@ -98,6 +107,7 @@ class SongAndPlayBloc extends Bloc<SongAndPlayEvent, SongAndPlayState> {
           initialIndex: event.currentIndex);
 
       emit(state.copyWith(
+        currentindex: event.currentIndex,
         isplaying: true,
       ));
 

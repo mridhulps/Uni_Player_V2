@@ -9,11 +9,12 @@ Future<void> addPlayListBottomSheet(
   BuildContext context,
 ) {
   final TextEditingController controller = TextEditingController();
+
   return showModalBottomSheet(
       backgroundColor: Colors.black,
       context: context,
       isScrollControlled: true,
-      isDismissible: false,
+      isDismissible: true,
       builder: (ctx) {
         //ROOT CONTAINER;
         return SingleChildScrollView(
@@ -31,31 +32,16 @@ Future<void> addPlayListBottomSheet(
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    ElevatedButton(
-                      style: const ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll<Color>(Colors.white)),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const CustomText(
-                        string: 'Cancel',
-                        color: Colors.black,
-                      ),
+                    //CANCEL BUTTON;
+
+                    customButton(
+                      name: 'Cancel',
+                      ontap: () => Navigator.of(context).pop(),
                     ),
-                    ElevatedButton(
-                      style: const ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll<Color>(Colors.white)),
-                      onPressed: () {
-                        validation(controller, context);
-                        Navigator.of(context).pop();
-                      },
-                      child: const CustomText(
-                        string: 'Enter',
-                        color: Colors.black,
-                      ),
-                    )
+                    customButton(
+                      name: 'Enter',
+                      ontap: () => validation(controller, context),
+                    ),
                   ],
                 )
               ],
@@ -71,7 +57,7 @@ validation(TextEditingController controller, BuildContext context) {
   final text = controller.text;
 
   if (text.isEmpty) {
-    return;
+    Navigator.of(context).pop();
   } else {
     final model = CustomPlayListModel(songList: [], playistName: text);
 
@@ -80,5 +66,6 @@ validation(TextEditingController controller, BuildContext context) {
         .add(AddPlayListEvent(playlistmodel: model));
 
     controller.clear();
+    Navigator.of(context).pop();
   }
 }

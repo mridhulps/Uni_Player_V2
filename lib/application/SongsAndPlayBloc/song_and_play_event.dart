@@ -14,6 +14,12 @@ class GetSonglist extends SongAndPlayEvent {
   GetSonglist({this.sorttype = SongSortType.DATE_ADDED});
 }
 
+class AddCurrentIndexEvents extends SongAndPlayEvent {
+  final int currentIndex;
+
+  AddCurrentIndexEvents({required this.currentIndex});
+}
+
 class SortingEvent extends SongAndPlayEvent {
   final SongSortType sort;
   final BuildContext context;
