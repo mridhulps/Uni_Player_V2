@@ -41,6 +41,8 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
         final list = AudioSource.uri(Uri.parse(e.songuri!));
 
         audiosourcelist.add(list);
+
+        
       }
 
        emit(state.copyWith(

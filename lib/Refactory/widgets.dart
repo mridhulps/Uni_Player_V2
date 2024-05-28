@@ -8,6 +8,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:uni_player_2/app_Global_const/const.dart';
 import 'package:uni_player_2/application/PlayListBloc/play_list_bloc_bloc.dart';
+import 'package:uni_player_2/application/SongsAndPlayBloc/song_and_play_bloc.dart';
 import 'package:uni_player_2/global/Entity/playlist_model.dart';
 import 'package:uni_player_2/global/Entity/positionStream.dart';
 
@@ -230,14 +231,14 @@ mixin IndexstreamInstances {
 
 //TEXT STREAM CONTAINER;
 
-class TextStreamwidget extends StatelessWidget with IndexstreamInstances {
+class TitleAndArtistStream extends StatelessWidget with IndexstreamInstances {
   final StreamText streamtext;
   final TextType texttype;
   final double paddingtop;
   final double paddingbottom;
   final TextOverflow? overflow;
 
-  TextStreamwidget(
+  TitleAndArtistStream(
       {super.key,
       this.streamtext = StreamText.title,
       this.texttype = TextType.deFault,
@@ -247,7 +248,7 @@ class TextStreamwidget extends StatelessWidget with IndexstreamInstances {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomepageBloc, HomepageState>(
+    return BlocBuilder<SongAndPlayBloc, SongAndPlayState>(
       builder: (context, bloc) {
         return StreamBuilder<int?>(
             stream: player.currentIndexStream,
@@ -266,8 +267,9 @@ class TextStreamwidget extends StatelessWidget with IndexstreamInstances {
                   fontweight: FontWeight.bold,
                 );
               } else {
-                final title = bloc.currentPLayingList[state.data!].title;
-                final artist = bloc.currentPLayingList[state.data!].artist;
+                final currentstate = bloc.currentSongList[state.data!];
+                final title = currentstate.title;
+                final artist = currentstate.artist;
                 return CustomText(
                   string: streamtext == StreamText.title ? title : artist,
                   paddingtop: paddingtop,
@@ -305,13 +307,12 @@ class ArtworkStreamWidget extends StatelessWidget with IndexstreamInstances {
       this.musicnotesize = 0.0});
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomepageBloc, HomepageState>(
+    return BlocBuilder<SongAndPlayBloc, SongAndPlayState>(
       builder: (context, states) {
         return Stack(fit: StackFit.expand, children: [
           StreamBuilder<int?>(
               stream: player.currentIndexStream,
               builder: (context, state) {
-                print('artworkstreambuilder builded');
                 if (state.data == null || state.hasError) {
                   if (nullwiget == StreamNullWidget.musicnote) {
                     return CircleAvatar(
@@ -329,7 +330,7 @@ class ArtworkStreamWidget extends StatelessWidget with IndexstreamInstances {
                     );
                   }
                 } else {
-                  final id = states.currentPLayingList[state.data!].artworkid;
+                  final id = states.currentSongList[state.data!].artworkid;
 
                   return onlyqueryArtwork(
                       artworkId: id,

@@ -69,12 +69,12 @@ class HomePage extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          TextStreamwidget(
+                                          TitleAndArtistStream(
                                             streamtext: StreamText.title,
                                             texttype: TextType.titleMedium,
                                             paddingbottom: 10,
                                           ),
-                                          TextStreamwidget(
+                                          TitleAndArtistStream (
                                             streamtext: StreamText.artist,
                                             texttype: TextType.subtitleMedium,
                                             overflow: TextOverflow.ellipsis,

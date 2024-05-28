@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
-import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
+
+import 'package:uni_player_2/application/SongsAndPlayBloc/song_and_play_bloc.dart';
 import 'package:uni_player_2/presentation/homepage/widgets/option_dropdown.dart';
 
 class AppbarCustom extends StatelessWidget {
@@ -20,12 +21,16 @@ class AppbarCustom extends StatelessWidget {
         automaticallyImplyLeading: false,
         centerTitle: true,
         //ICONBUTTON,
-        leading: iconWidget(
-            icon: Icons.menu_rounded,
-            ontap: () {
-              Scaffold.of(context).openDrawer();
-              context.read<SongListBloc>().add(GetSonglist());
-            }),
+        leading: BlocBuilder<SongAndPlayBloc, SongAndPlayState>(
+          builder: (context, state) {
+            return iconWidget(
+                icon: Icons.menu_rounded,
+                ontap: () {
+                  Scaffold.of(context).openDrawer();
+                  context.read<SongAndPlayBloc>().add(GetSonglist());
+                });
+          },
+        ),
         title: Text('playing',
             style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 fontWeight: FontWeight.bold,

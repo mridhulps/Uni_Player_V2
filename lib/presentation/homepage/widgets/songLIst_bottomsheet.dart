@@ -5,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
-import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
+
+import 'package:uni_player_2/application/SongsAndPlayBloc/song_and_play_bloc.dart';
 
 import 'package:uni_player_2/presentation/songlist_page/widgets/songlist_widgets.dart';
 
@@ -33,7 +34,7 @@ songListBottomSheet(BuildContext context) {
                         ),
                       ),
                     ),
-                    BlocBuilder<HomepageBloc, HomepageState>(
+                    BlocBuilder<SongAndPlayBloc, SongAndPlayState>(
                       builder: (context, state) {
                         if (state.isLoading == true) {
                           return const Expanded(
@@ -54,7 +55,7 @@ songListBottomSheet(BuildContext context) {
                               ),
                             ),
                           );
-                        } else if (state.currentPLayingList.isEmpty) {
+                        } else if (state.currentSongList.isEmpty) {
                           return const Expanded(
                             child: Center(
                               child: CustomText(
@@ -67,7 +68,7 @@ songListBottomSheet(BuildContext context) {
                         } else {
                           return Expanded(
                               child: SongLIstWidget(
-                            songlist: state.currentPLayingList,
+                            songlist: state.currentSongList,
                             controller: controller,
                           ));
                         }

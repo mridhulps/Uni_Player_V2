@@ -155,11 +155,18 @@ class SongAndPlayBloc extends Bloc<SongAndPlayEvent, SongAndPlayState> {
         await locator.get<SongListServiceImp>().getSongList(state.sorttype);
 
     songlist.fold((error) {
-      return emit(
-          state.copyWith(isFailures: true, isloadings: false, songlist: []));
+      return emit(state.copyWith(
+          isFailures: true,
+          isloadings: false,
+          currentsonglist: [],
+          sortingList: []));
     }, (list) {
-      return emit(
-          state.copyWith(isFailures: false, isloadings: false, songlist: list));
+      log(list.length.toString());
+      return emit(state.copyWith(
+        isFailures: false,
+        isloadings: false,
+        sortingList: list,
+      ));
     });
   }
 }

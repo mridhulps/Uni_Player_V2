@@ -4,7 +4,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
 
-import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
+import 'package:uni_player_2/application/SongsAndPlayBloc/song_and_play_bloc.dart';
 import 'package:uni_player_2/global/Entity/sort_model.dart';
 
 class SortingButton extends StatelessWidget {
@@ -28,7 +28,7 @@ class SortingButton extends StatelessWidget {
           .map((e) => customItem(
               text: e.sortName,
               onpress: () => context
-                  .read<SongListBloc>()
+                  .read<SongAndPlayBloc>()
                   .add(SortingEvent(sort: e.sorttype, context: context))))
           .toList(),
     );

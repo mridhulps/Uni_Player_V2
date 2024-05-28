@@ -23,60 +23,15 @@ class DurationBar extends StatelessWidget {
       child: Column(
         children: [
           //DURATION TIME;
-          Padding(
-            padding: const EdgeInsets.only(
+          const Padding(
+            padding: EdgeInsets.only(
               top: 10,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                StreamBuilder<PositionDataStream>(
-                    stream: positionDataStream(),
-                    builder: (context, state) {
-                      return CustomText(
-                          string: state.data == null || state.hasError
-                              ? '0.00'
-                              : (state.data!.positionsstream
-                                          .toString()
-                                          .substring(0, 1) ==
-                                      '0')
-                                  ? state.data!.positionsstream
-                                      .toString()
-                                      .substring(2)
-                                      .split('.')
-                                      .first
-                                  : state.data!.positionsstream
-                                      .toString()
-                                      .split('.')
-                                      .first,
-                          paddingleft: 20,
-                          color: ConstColor.backgroundcolor,
-                          fontweight: FontWeight.bold);
-                    }),
-                StreamBuilder<PositionDataStream?>(
-                    stream: positionDataStream(),
-                    builder: (context, state) {
-                      return CustomText(
-                        string: (state.data == null || state.hasError)
-                            ? '0.00'
-                            : (state.data!.durationstream
-                                        .toString()
-                                        .substring(0, 1) ==
-                                    '0')
-                                ? state.data!.durationstream
-                                    .toString()
-                                    .substring(2)
-                                    .split('.')
-                                    .first
-                                : state.data!.durationstream
-                                    .toString()
-                                    .split('.')
-                                    .first,
-                        paddingright: 20,
-                        fontweight: FontWeight.bold,
-                        color: ConstColor.backgroundcolor,
-                      );
-                    }),
+                DurationTextStream(streamtype: StreamType.position),
+                DurationTextStream(streamtype: StreamType.duration)
               ],
             ),
           ),
@@ -165,5 +120,53 @@ class DurationBar extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+//DURATION TEXT STREAM WIDGET;
+
+enum StreamType { position, duration }
+
+class DurationTextStream extends StatelessWidget {
+  final StreamType streamtype;
+
+  const DurationTextStream({super.key, required this.streamtype});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<PositionDataStream?>(
+        stream: positionDataStream(),
+        builder: (context, state) {
+          return CustomText(
+            string: (streamtype == StreamType.duration)
+                ? (state.data == null || state.hasError)
+                    ? '0.00'
+                    : (state.data!.durationstream.toString().substring(0, 1) ==
+                            '0')
+                        ? state.data!.durationstream
+                            .toString()
+                            .substring(2)
+                            .split('.')
+                            .first
+                        : state.data!.durationstream.toString().split('.').first
+                : (state.data == null || state.hasError)
+                    ? '0.00'
+                    : (state.data!.positionsstream.toString().substring(0, 1) ==
+                            '0')
+                        ? state.data!.positionsstream
+                            .toString()
+                            .substring(2)
+                            .split('.')
+                            .first
+                        : state.data!.positionsstream
+                            .toString()
+                            .split('.')
+                            .first,
+            paddingright: 20,
+            paddingleft: 20,
+            fontweight: FontWeight.bold,
+            color: ConstColor.backgroundcolor,
+          );
+        });
   }
 }

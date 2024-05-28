@@ -8,7 +8,8 @@ import 'package:just_audio/just_audio.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
-import 'package:uni_player_2/application/HomePagebloc/homepage_bloc.dart';
+
+import 'package:uni_player_2/application/SongsAndPlayBloc/song_and_play_bloc.dart';
 
 import 'package:uni_player_2/global/domain/instances/instance.dart';
 
@@ -27,7 +28,7 @@ class ControllSystem extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              context.read<HomepageBloc>().add(BackwardEvent());
+              context.read<SongAndPlayBloc>().add(PlayPreviousEvent());
             },
             child: materialButton(
               child: iconWidget(
@@ -54,7 +55,7 @@ class ControllSystem extends StatelessWidget {
 
                 return InkWell(
                   onTap: () {
-                    context.read<HomepageBloc>().add(PlayAndPauseEvent());
+                    context.read<SongAndPlayBloc>().add(PlayAndPauseEvent());
                   },
                   child: materialButton(
                       radius: 30,
@@ -75,7 +76,7 @@ class ControllSystem extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              context.read<HomepageBloc>().add(ForwardEvent());
+              context.read<SongAndPlayBloc>().add(PlayNextEvent());
             },
             child: materialButton(
               child: iconWidget(

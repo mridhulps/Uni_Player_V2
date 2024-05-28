@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:uni_player_2/Refactory/widgets.dart';
 import 'package:uni_player_2/app_Global_const/const.dart';
-import 'package:uni_player_2/application/SongListbloc/song_list_bloc.dart';
+
+import 'package:uni_player_2/application/SongsAndPlayBloc/song_and_play_bloc.dart';
 
 import 'package:uni_player_2/presentation/songlist_page/widgets/songlist_widgets.dart';
 
@@ -15,7 +16,7 @@ class BuildSongList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SongListBloc, SongListState>(
+    return BlocBuilder<SongAndPlayBloc, SongAndPlayState>(
       builder: (context, state) {
         if (state.isLoading == true) {
           return const Center(
@@ -32,7 +33,7 @@ class BuildSongList extends StatelessWidget {
               fontweight: FontWeight.bold,
             ),
           );
-        } else if (state.songList.isEmpty) {
+        } else if (state.sortingList.isEmpty) {
           return const Center(
             child: CustomText(
               string: 'Nothing Found',
@@ -42,7 +43,7 @@ class BuildSongList extends StatelessWidget {
           );
         } else {
           return SongLIstWidget(
-            songlist: state.songList,
+            songlist: state.sortingList,
           );
         }
       },

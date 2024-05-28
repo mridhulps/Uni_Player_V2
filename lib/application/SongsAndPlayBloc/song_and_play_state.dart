@@ -2,28 +2,31 @@ part of 'song_and_play_bloc.dart';
 
 class SongAndPlayState {
   final PermissionType permissionstat;
-  final bool alreadyLoaded;
+  final bool alreadySongListLoaded;
   final bool isLoading;
   final bool isplaying;
   final bool isFailure;
   final int? currentIndex;
 
+  final SongSortType sorttype;
+
   final ConcatenatingAudioSource? audiosourceList;
 
-  final List<CustomSongModel> currentPLayingList;
+  final List<CustomSongModel> sortingList;
 
-  final SongSortType sorttype;
+  final List<CustomSongModel> currentSongList;
 
   SongAndPlayState({
     required this.permissionstat,
-    required this.alreadyLoaded,
+    required this.alreadySongListLoaded,
     required this.isplaying,
     required this.isLoading,
     required this.isFailure,
     this.audiosourceList,
     this.currentIndex,
-    required this.currentPLayingList,
     this.sorttype = SongSortType.DATE_ADDED,
+    required this.sortingList,
+    required this.currentSongList,
   });
 
   SongAndPlayState copyWith(
@@ -37,19 +40,20 @@ class SongAndPlayState {
       bool? isloadings,
       bool? isFailures,
       SongSortType? sortingtype,
-      List<CustomSongModel>? songlist,
+      List<CustomSongModel>? sortingList,
       List<CustomSongModel>? currentsonglist,
       ConcatenatingAudioSource? audiosource}) {
     return SongAndPlayState(
-      alreadyLoaded: alreadyLoaded ?? this.alreadyLoaded,
+      alreadySongListLoaded: alreadyLoaded ?? alreadySongListLoaded,
       currentIndex: currentindex ?? currentIndex,
       permissionstat: permissiontype ?? permissionstat,
       isplaying: isplaying ?? this.isplaying,
       isFailure: isFailures ?? isFailure,
       isLoading: isloadings ?? isLoading,
-      currentPLayingList: currentsonglist ?? currentPLayingList,
-      audiosourceList: audiosource ?? audiosourceList,
       sorttype: sortingtype ?? sorttype,
+      sortingList: sortingList ?? this.sortingList,
+      currentSongList: currentsonglist ?? currentSongList,
+      audiosourceList: audiosource ?? audiosourceList,
     );
   }
 }
@@ -57,11 +61,12 @@ class SongAndPlayState {
 final class SongAndPlayInitial extends SongAndPlayState {
   SongAndPlayInitial({
     super.permissionstat = PermissionType.initial,
-    super.alreadyLoaded = false,
+    super.alreadySongListLoaded = false,
     super.isplaying = false,
     super.isLoading = false,
     super.isFailure = false,
-    super.currentPLayingList = const [],
+    super.sortingList = const[],
+    super.currentSongList = const [],
     super.sorttype = SongSortType.DATE_ADDED,
   });
 }
