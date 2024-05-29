@@ -8,6 +8,8 @@ import 'package:uni_player_2/Refactory/widgets.dart';
 
 import 'package:uni_player_2/app_Global_const/const.dart';
 import 'package:uni_player_2/application/PlayListBloc/play_list_bloc_bloc.dart';
+import 'package:uni_player_2/application/SongsAndPlayBloc/song_and_play_bloc.dart';
+import 'package:uni_player_2/global/Entity/songInfo_model.dart';
 
 class ArtworkBox extends StatelessWidget {
   final Widget child;
@@ -41,7 +43,21 @@ class ArtworkBox extends StatelessWidget {
             children: [
               iconWidget(
                   icon: Icons.photo_library_rounded, color: Colors.white),
-              const FavoriteButton()
+              BlocBuilder<SongAndPlayBloc, SongAndPlayState>(
+                builder: (context, state) {
+                  CustomSongModel? currentsong;
+
+                  if (state.currentIndex == null) {
+                    null;
+                  } else {
+                    currentsong = state.currentSongList[state.currentIndex!];
+                  }
+
+                  return FavoriteButton(
+                    currentsong: currentsong,
+                  );
+                },
+              )
             ],
           )
         ],
@@ -51,31 +67,37 @@ class ArtworkBox extends StatelessWidget {
 }
 
 class FavoriteButton extends StatelessWidget {
-  const FavoriteButton({
-    super.key,
-  });
+  final CustomSongModel? currentsong;
+
+  const FavoriteButton({super.key, required this.currentsong});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PlayListBlocBloc, PlayListBlocState>(
       builder: (context, state) {
-        if (state.currentSonglist.isEmpty) {
-          return iconWidget(icon: Icons.favorite);
-        }
-        final currentsong = state.currentSonglist[state.currentIndex];
+        if (currentsong == null) {
+          return iconWidget(icon: Icons.favorite, color: Colors.white);
+        } else {
+          final favList = state.favoriteList;
 
-        for (var id in state.favoriteList) {
-          if (currentsong.artworkid == id.artworkid) {
-            return iconWidget(icon: Icons.favorite, color: Colors.red);
+          for (var id in favList) {
+            if (currentsong!.artworkid == id.artworkid) {
+              return InkWell(
+                  onTap: () {
+                    context.read<PlayListBlocBloc>().add(
+                        RemoveFromFavoriteEvent(
+                            currentsongid: currentsong!.artworkid));
+                  },
+                  child: iconWidget(icon: Icons.favorite, color: Colors.red));
+            }
           }
-          break;
         }
+
         return InkWell(
             onTap: () => context
                 .read<PlayListBlocBloc>()
-                .add(AddFavoriteEvent(favsong: currentsong)),
-            child:
-                iconWidget(icon: Icons.favorite_outline, color: Colors.white));
+                .add(AddFavoriteEvent(favsong: currentsong!)),
+            child: iconWidget(icon: Icons.favorite, color: Colors.white));
       },
     );
   }

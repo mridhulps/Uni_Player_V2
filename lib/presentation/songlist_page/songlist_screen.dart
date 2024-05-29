@@ -25,48 +25,46 @@ class MusicListScreen extends StatelessWidget {
           backgroundColor: Colors.transparent,
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-            child: SizedBox(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  AppBar(
-                    automaticallyImplyLeading: false,
-                    backgroundColor: Colors.transparent,
-                    title: const CustomText(
-                      string: 'Songs',
-                      texttype: TextType.titleLarge,
-                      fonttype: FontType.aboretofont,
-                      color: Colors.white,
-                      fontsize: 23,
-                      fontweight: FontWeight.bold,
-                    ),
-                    actions: [SortingButton()],
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                AppBar(
+                  automaticallyImplyLeading: false,
+                  backgroundColor: Colors.transparent,
+                  title: const CustomText(
+                    string: 'Songs',
+                    texttype: TextType.titleLarge,
+                    fonttype: FontType.aboretofont,
+                    color: Colors.white,
+                    fontsize: 23,
+                    fontweight: FontWeight.bold,
                   ),
-
-                  //TEXTFIELD CONTAINER;
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    child: Container(
-                      padding: const EdgeInsets.only(top: 4, bottom: 4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        color: ConstColor.whitecolor,
-                      ),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                            hintText: 'Search Songs',
-                            prefixIcon: iconWidget(
-                                icon: Icons.search, color: Colors.black54),
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.only(top: 10)),
-                      ),
+                  actions: [SortingButton()],
+                ),
+            
+                //TEXTFIELD CONTAINER;
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 4, bottom: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      color: ConstColor.whitecolor,
+                    ),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          hintText: 'Search Songs',
+                          prefixIcon: iconWidget(
+                              icon: Icons.search, color: Colors.black54),
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.only(top: 10)),
                     ),
                   ),
-                  //SONG LIST build CONTAINER;
-
-                  const Expanded(child: BuildSongList()),
-                ],
-              ),
+                ),
+                //SONG LIST build CONTAINER;
+            
+                const Expanded(child: BuildSongList()),
+              ],
             ),
           )),
     );

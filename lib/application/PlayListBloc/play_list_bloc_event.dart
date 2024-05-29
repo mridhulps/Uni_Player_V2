@@ -14,6 +14,11 @@ class AddFavoriteEvent extends PlayListBlocEvent {
   AddFavoriteEvent({required this.favsong});
 }
 
+class RemoveFromFavoriteEvent extends PlayListBlocEvent {
+  final int currentsongid;
+  RemoveFromFavoriteEvent({required this.currentsongid});
+}
+
 class AddPlayListEvent extends PlayListBlocEvent {
   final CustomPlayListModel playlistmodel;
 

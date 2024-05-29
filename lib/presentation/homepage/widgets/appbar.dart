@@ -21,19 +21,16 @@ class AppbarCustom extends StatelessWidget {
         automaticallyImplyLeading: false,
         centerTitle: true,
         //ICONBUTTON,
-        leading: BlocBuilder<SongAndPlayBloc, SongAndPlayState>(
-          builder: (context, state) {
-            return InkWell(
-              onTap: () {
-                Scaffold.of(context).openDrawer();
-                context.read<SongAndPlayBloc>().add(GetSonglist());
-              },
-              child: iconWidget(
-                icon: Icons.menu_rounded,
-              ),
-            );
+        leading: InkWell(
+          onTap: () {
+            Scaffold.of(context).openDrawer();
+            context.read<SongAndPlayBloc>().add(GetSonglist());
           },
+          child: iconWidget(
+            icon: Icons.menu_rounded,
+          ),
         ),
+
         title: Text('playing',
             style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 fontWeight: FontWeight.bold,
@@ -42,7 +39,7 @@ class AppbarCustom extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(right: 0),
             child: OptionDropdownButton(),
-          )
+          ),
         ],
       ),
     );

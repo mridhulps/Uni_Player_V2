@@ -19,6 +19,9 @@ class PlayListBlocBloc extends Bloc<PlayListBlocEvent, PlayListBlocState> {
     on<AddcurrentSongList>((event, emit) => addcurrentsonglist(event, emit));
 
     on<AddCurrentIndexEvent>((event, emit) => addcurrentIndex(event, emit));
+
+    on<RemoveFromFavoriteEvent>(
+        (event, emit) => romoveFromFavorite(event, emit));
   }
 
   addPlayList(AddPlayListEvent event, Emitter<PlayListBlocState> emit) {
@@ -68,5 +71,13 @@ class PlayListBlocBloc extends Bloc<PlayListBlocEvent, PlayListBlocState> {
 
   addcurrentIndex(AddCurrentIndexEvent event, Emitter<PlayListBlocState> emit) {
     emit(state.copywith(currentindex: event.currentindex));
+  }
+
+  romoveFromFavorite(
+      RemoveFromFavoriteEvent event, Emitter<PlayListBlocState> emit) {
+    state.favoriteList
+        .removeWhere((song) => event.currentsongid == song.artworkid);
+
+    return emit(state.copywith(favoritelist: state.favoriteList));
   }
 }
